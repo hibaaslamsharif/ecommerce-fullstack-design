@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="header-top-content">
+                    <div class="header-top-left">
+                        <span class="shipping-info">Free Shipping on orders over $50</span>
+                    </div>
+                    <div class="header-top-right">
+                        <span class="contact-info">Need help? Call us: +1 234 567 890</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="header-main-content">
+                    <div class="logo">
+                        <img src="https://via.placeholder.com/150x50" alt="Logo">
+                    </div>
+                    <nav class="main-nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="shop.html">Shop</a></li>
+                            <li><a href="deals.html">Deals</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div class="header-actions">
+                        <button class="search-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                        </button>
+                        <button class="cart-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M17 18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h10zM7 7h10v3H7V7zm4 6c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-2-6h6v2H9V7z"/>
+                            </svg>
+                            <span class="cart-count">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Details Section -->
+    <section class="product-details">
+        <div class="container">
+            <div class="product-details-content">
+                <div class="product-images">
+                    <div class="main-image">
+                        <img src="https://via.placeholder.com/400x400" alt="Product Main Image">
+                    </div>
+                    <div class="thumbnail-images">
+                        <img src="https://via.placeholder.com/100x100" alt="Thumbnail 1">
+                        <img src="https://via.placeholder.com/100x100" alt="Thumbnail 2">
+                        <img src="https://via.placeholder.com/100x100" alt="Thumbnail 3">
+                        <img src="https://via.placeholder.com/100x100" alt="Thumbnail 4">
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h1>Smartphone Pro X1</h1>
+                    <div class="price-section">
+                        <span class="price">$499.99</span>
+                        <span class="old-price">$599.99</span>
+                    </div>
+                    <div class="product-rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="reviews">(45 reviews)</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Experience next-generation smartphone technology with the Pro X1. Featuring a stunning AMOLED display, powerful processor, and advanced camera system.</p>
+                    </div>
+                    <div class="product-options">
+                        <div class="color-options">
+                            <span class="option-label">Color:</span>
+                            <div class="color-select">
+                                <button class="color-btn active" style="background-color: #000000;"></button>
+                                <button class="color-btn" style="background-color: #ffffff;"></button>
+                                <button class="color-btn" style="background-color: #333333;"></button>
+                            </div>
+                        </div>
+                        <div class="storage-options">
+                            <span class="option-label">Storage:</span>
+                            <select class="storage-select">
+                                <option value="128">128GB</option>
+                                <option value="256">256GB</option>
+                                <option value="512">512GB</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button class="qty-btn minus">-</button>
+                            <input type="number" value="1" min="1" class="qty-input">
+                            <button class="qty-btn plus">+</button>
+                        </div>
+                        <button class="add-to-cart-btn">Add to Cart</button>
+                        <button class="wishlist-btn">Add to Wishlist</button>
+                    </div>
+                    <div class="product-meta">
+                        <div class="share-options">
+                            <span>Share:</span>
+                            <button class="share-btn">Facebook</button>
+                            <button class="share-btn">Twitter</button>
+                            <button class="share-btn">Pinterest</button>
+                        </div>
+                        <div class="product-tags">
+                            <span>Tags:</span>
+                            <a href="#" class="tag">Smartphone</a>
+                            <a href="#" class="tag">Technology</a>
+                            <a href="#" class="tag">Electronics</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section class="related-products">
+        <div class="container">
+            <h2>Related Products</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200" alt="Related Product 1">
+                    <h3>Wireless Headphones</h3>
+                    <p class="price">$99.99</p>
+                    <button class="quick-view">Quick View</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200" alt="Related Product 2">
+                    <h3>Smartwatch Pro</h3>
+                    <p class="price">$199.99</p>
+                    <button class="quick-view">Quick View</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://via.placeholder.com/300x200" alt="Related Product 3">
+                    <h3>Laptop Elite</h3>
+                    <p class="price">$899.99</p>
+                    <button class="quick-view">Quick View</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>Your trusted source for the latest technology products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="deals.html">Deals</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: info@eshop.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                    <div class="social-links">
+                        <a href="#" class="social-btn">Facebook</a>
+                        <a href="#" class="social-btn">Twitter</a>
+                        <a href="#" class="social-btn">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 E-Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

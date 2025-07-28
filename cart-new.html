@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Ecommerce</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        /* Cart Page Specific Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .cart-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            padding: 20px 0;
+            border-bottom: 1px solid #e2e8f0;
+            align-items: center;
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .product-info img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .prod-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prod-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .prod-variant {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .prod-price, .prod-total {
+            text-align: center;
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .prod-qty {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .prod-qty input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .cart-summary {
+            margin-top: 30px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin-left: auto;
+        }
+
+        .cart-summary > div {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .order-total {
+            font-weight: 600;
+            font-size: 18px;
+            border-bottom: none !important;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #3182ce;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .checkout-btn:hover {
+            background: #2c5282;
+        }
+
+        @media (max-width: 768px) {
+            .cart-header, .cart-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            
+            .prod-qty {
+                justify-content: flex-start;
+                margin-top: 10px;
+            }
+            
+            .cart-summary {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">Ecommerce</a>
+                </div>
+                <div class="search-bar">
+                    <select>
+                        <option>All Categories</option>
+                    </select>
+                    <input type="text" placeholder="Search for products...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="header-icons">
+                    <a href="#" class="header-icon"><i class="far fa-user"></i> Account</a>
+                    <a href="#" class="header-icon"><i class="far fa-heart"></i> Wishlist</a>
+                    <a href="cart.html" class="header-icon cart-icon">
+                        <i class="fas fa-shopping-cart"></i> 
+                        <span class="cart-count">2</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Your Shopping Cart</h1>
+        <div class="cart-table">
+            <div class="cart-header">
+                <div>Product</div>
+                <div>Price</div>
+                <div>Quantity</div>
+                <div>Total</div>
+            </div>
+            
+            <!-- Cart Item 1 -->
+            <div class="cart-row">
+                <div class="product-info">
+                    <img src="https://via.placeholder.com/80x80?text=GoPro" alt="GoPro HERO6 4K"/>
+                    <div class="prod-details">
+                        <p class="prod-name">GoPro HERO6 4K</p>
+                        <p class="prod-variant">Black</p>
+                    </div>
+                </div>
+                <div class="prod-price">$998.00</div>
+                <div class="prod-qty">
+                    <button class="qty-btn">−</button>
+                    <input type="number" value="1" min="1"/>
+                    <button class="qty-btn">+</button>
+                </div>
+                <div class="prod-total">$998.00</div>
+            </div>
+            
+            <!-- Cart Item 2 -->
+            <div class="cart-row">
+                <div class="product-info">
+                    <img src="https://via.placeholder.com/80x80?text=Canon" alt="Canon EOS 2000D"/>
+                    <div class="prod-details">
+                        <p class="prod-name">Canon EOS 2000D</p>
+                        <p class="prod-variant">Black</p>
+                    </div>
+                </div>
+                <div class="prod-price">$499.00</div>
+                <div class="prod-qty">
+                    <button class="qty-btn">−</button>
+                    <input type="number" value="1" min="1"/>
+                    <button class="qty-btn">+</button>
+                </div>
+                <div class="prod-total">$499.00</div>
+            </div>
+            
+            <div class="cart-summary">
+                <div>
+                    <p>Subtotal</p>
+                    <p>$1,497.00</p>
+                </div>
+                <div>
+                    <p>Tax (5%)</p>
+                    <p>$74.85</p>
+                </div>
+                <div class="order-total">
+                    <p>Total</p>
+                    <p>$1,571.85</p>
+                </div>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>Your trusted source for the latest technology products.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="productlist.html">Shop</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@example.com</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ecommerce. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Quantity buttons functionality
+        document.querySelectorAll('.qty-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const input = this.parentNode.querySelector('input[type=number]');
+                if (this.textContent === '+' && input.value < 10) {
+                    input.stepUp();
+                } else if (this.textContent === '−' && input.value > 1) {
+                    input.stepDown();
+                }
+                updateCartTotal();
+            });
+        });
+
+        // Update cart total when quantity changes
+        document.querySelectorAll('.prod-qty input').forEach(input => {
+            input.addEventListener('change', updateCartTotal);
+        });
+
+        function updateCartTotal() {
+            let subtotal = 0;
+            document.querySelectorAll('.cart-row').forEach(row => {
+                const price = parseFloat(row.querySelector('.prod-price').textContent.replace('$', ''));
+                const qty = parseInt(row.querySelector('.prod-qty input').value);
+                const total = price * qty;
+                row.querySelector('.prod-total').textContent = '$' + total.toFixed(2);
+                subtotal += total;
+            });
+            
+            const tax = subtotal * 0.05; // 5% tax
+            const total = subtotal + tax;
+            
+            document.querySelector('.cart-summary div:nth-child(1) p:last-child').textContent = '$' + subtotal.toFixed(2);
+            document.querySelector('.cart-summary div:nth-child(2) p:last-child').textContent = '$' + tax.toFixed(2);
+            document.querySelector('.order-total p:last-child').textContent = '$' + total.toFixed(2);
+        }
+
+        // Initialize cart total
+        updateCartTotal();
+    </script>
+</body>
+</html>

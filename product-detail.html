@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Detail - Ecommerce</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo">Brand</div>
+    <div class="search-bar">
+      <select>
+        <option>All category</option>
+      </select>
+      <input type="text" placeholder="Search"/>
+      <button>Search</button>
+    </div>
+    <div class="header-icons">
+      <div>Profile</div>
+      <div>Message</div>
+      <div>Orders</div>
+      <div>My cart</div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="productlist.html">Shop</a></li>
+      <li><a href="#">Categories</a></li>
+      <li><a href="#">Laptops</a></li>
+      <li><a href="#">Smartphones</a></li>
+      <li><a href="#">Cameras</a></li>
+      <li><a href="#">Accessories</a></li>
+    </ul>
+  </nav>
+
+  <!-- Breadcrumb Section -->
+  <div class="breadcrumb-section">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <a href="index.html">Home</a>
+        <span class="divider">/</span>
+        <a href="productlist.html">Shop</a>
+        <span class="divider">/</span>
+        <span class="current">Product Details</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Section -->
+  <div class="container">
+    <div class="product-detail">
+      <!-- Product Gallery -->
+      <div class="gallery">
+        <img src="https://via.placeholder.com/500x500?text=Main+Product+Image" alt="Main Product Image" class="main-img" />
+        <div class="thumbnail-row">
+          <img src="https://via.placeholder.com/100x100?text=Thumb+1" alt="Thumbnail 1" class="thumbnail" />
+          <img src="https://via.placeholder.com/100x100?text=Thumb+2" alt="Thumbnail 2" class="thumbnail" />
+          <img src="https://via.placeholder.com/100x100?text=Thumb+3" alt="Thumbnail 3" class="thumbnail" />
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="product-info">
+        <h1 class="title">GoPro HERO6 4K Action Camera - Black</h1>
+        <p class="price">
+          <span class="current-price">$998.00</span>
+          <span class="old-price">$1128.00</span>
+        </p>
+        <div class="rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <span class="review-count">(154 reviews)</span>
+        </div>
+
+        <div class="options">
+          <label>Color:</label>
+          <div class="colors">
+            <span class="color-option active" style="background-color: black;" title="Black"></span>
+            <span class="color-option" style="background-color: gray;" title="Gray"></span>
+          </div>
+
+          <label>Size:</label>
+          <select class="size-select">
+            <option>Small</option>
+            <option>Medium</option>
+            <option>Large</option>
+          </select>
+
+          <label>Quantity:</label>
+          <div class="quantity-selector">
+            <button class="quantity-btn" id="decrease-qty">-</button>
+            <input type="number" min="1" value="1" class="quantity-input" id="quantity" readonly />
+            <button class="quantity-btn" id="increase-qty">+</button>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="add-cart">
+            <i class="fas fa-shopping-cart"></i> Add to Cart
+          </button>
+          <button class="wishlist">
+            <i class="far fa-heart"></i> Add to Wishlist
+          </button>
+        </div>
+
+        <div class="shipping-info">
+          <p><i class="fas fa-truck"></i> Free shipping on orders over $50</p>
+          <p><i class="fas fa-undo"></i> 30-day return policy</p>
+          <p><i class="fas fa-shield-alt"></i> 2-year warranty included</p>
+        </div>
+
+        <div class="social-share">
+          <span>Share:</span>
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Tabs -->
+    <div class="product-tabs">
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="description">Description</button>
+        <button class="tab-btn" data-tab="specifications">Specifications</button>
+        <button class="tab-btn" data-tab="reviews">Reviews (154)</button>
+      </div>
+      
+      <div class="tab-content">
+        <div id="description" class="tab-pane active">
+          <h3>Product Description</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        
+        <div id="specifications" class="tab-pane">
+          <h3>Technical Specifications</h3>
+          <table class="specs-table">
+            <tr>
+              <th>Brand</th>
+              <td>GoPro</td>
+            </tr>
+            <tr>
+              <th>Model</th>
+              <td>HERO6 Black</td>
+            </tr>
+            <tr>
+              <th>Video Resolution</th>
+              <td>4K60, 2.7K120, 1080p240 video</td>
+            </tr>
+            <tr>
+              <th>Photo Resolution</th>
+              <td>12MP photos</td>
+            </tr>
+            <tr>
+              <th>Waterproof</th>
+              <td>Yes, up to 33ft (10m) without housing</td>
+            </tr>
+          </table>
+        </div>
+        
+        <div id="reviews" class="tab-pane">
+          <h3>Customer Reviews</h3>
+          <div class="review">
+            <div class="review-header">
+              <div class="reviewer">John D.</div>
+              <div class="review-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+              <div class="review-date">April 15, 2023</div>
+            </div>
+            <div class="review-title">Great camera for action shots!</div>
+            <p class="review-text">The video quality is amazing, especially in 4K. Battery life could be better, but overall very satisfied with my purchase.</p>
+          </div>
+          
+          <div class="review">
+            <div class="review-header">
+              <div class="reviewer">Sarah M.</div>
+              <div class="review-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="review-date">March 28, 2023</div>
+            </div>
+            <div class="review-title">Perfect for my vlogging needs</div>
+            <p class="review-text">The image stabilization is a game changer. I use it for my travel vlogs and the footage is always smooth and crisp.</p>
+          </div>
+          
+          <button class="write-review-btn">Write a Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="related-section">
+      <h2>You May Also Like</h2>
+      <div class="related-products">
+        <div class="related-product">
+          <div class="product-badge">-15%</div>
+          <img src="https://via.placeholder.com/200x200?text=Product+1" alt="Related Product 1" />
+          <h3>GoPro HERO9 Black</h3>
+          <div class="price">$449.99 <span class="old-price">$529.99</span></div>
+          <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+        
+        <div class="related-product">
+          <div class="product-badge new">New</div>
+          <img src="https://via.placeholder.com/200x200?text=Product+2" alt="Related Product 2" />
+          <h3>DJI Osmo Action</h3>
+          <div class="price">$349.00</div>
+          <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+        
+        <div class="related-product">
+          <img src="https://via.placeholder.com/200x200?text=Product+3" alt="Related Product 3" />
+          <h3>Insta360 ONE X2</h3>
+          <div class="price">$429.99</div>
+          <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+        
+        <div class="related-product">
+          <img src="https://via.placeholder.com/200x200?text=Product+4" alt="Related Product 4" />
+          <h3>Sony RX0 II</h3>
+          <div class="price">$699.99</div>
+          <button class="add-to-cart-btn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>About Us</h3>
+        <p>We offer the best products at competitive prices with excellent customer service.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Newsletter</h3>
+        <p>Subscribe to get updates on new arrivals and special offers.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email" required />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 YourBrand. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Remove active class from all buttons and panes
+          tabBtns.forEach(btn => btn.classList.remove('active'));
+          tabPanes.forEach(pane => pane.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding pane
+          this.classList.add('active');
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // Quantity selector
+      const quantityInput = document.getElementById('quantity');
+      const decreaseBtn = document.getElementById('decrease-qty');
+      const increaseBtn = document.getElementById('increase-qty');
+      
+      decreaseBtn.addEventListener('click', function() {
+        let value = parseInt(quantityInput.value);
+        if (value > 1) {
+          quantityInput.value = value - 1;
+        }
+      });
+      
+      increaseBtn.addEventListener('click', function() {
+        let value = parseInt(quantityInput.value);
+        quantityInput.value = value + 1;
+      });
+      
+      // Color selector
+      const colorOptions = document.querySelectorAll('.color-option');
+      colorOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          colorOptions.forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+      
+      // Thumbnail click to change main image
+      const thumbnails = document.querySelectorAll('.thumbnail');
+      const mainImg = document.querySelector('.main-img');
+      
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+          mainImg.src = this.src.replace('100x100', '500x500');
+          thumbnails.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
