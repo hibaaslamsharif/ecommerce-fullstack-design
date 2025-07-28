@@ -5,132 +5,487 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - Ecommerce</title>
     <link rel="stylesheet" href="index.css">
-    <!-- Add any additional CSS or JS files here -->
+    <style>
+      /* Modern Nav Bar */
+      .nav-bar {
+        background: #fff;
+        border-bottom: 1.5px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        margin-bottom: 0;
+      }
+      .nav-bar .nav-menu {
+        display: flex;
+        gap: 32px;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        min-height: 54px;
+      }
+      .nav-bar .nav-menu li {
+        display: inline-block;
+      }
+      .nav-bar .nav-menu a {
+        color: #2d3748;
+        text-decoration: none;
+        font-size: 1.08rem;
+        font-weight: 500;
+        padding: 8px 0 6px 0;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s, border-bottom 0.2s;
+        display: inline-block;
+      }
+      .nav-bar .nav-menu a:hover, .nav-bar .nav-menu a.active {
+        color: #3182ce;
+        border-bottom: 2px solid #3182ce;
+      }
+      @media (max-width: 800px) {
+        .nav-bar .nav-menu {
+          gap: 16px;
+          font-size: 0.98rem;
+        }
+      }
+      @media (max-width: 600px) {
+        .nav-bar .nav-menu {
+          flex-wrap: wrap;
+          gap: 10px;
+          min-height: 44px;
+        }
+      }
+      /* Modern Breadcrumb */
+      .breadcrumb-section {
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 0.7em 0;
+        font-size: 1.01rem;
+      }
+      .breadcrumb-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #4a5568;
+        font-weight: 500;
+        font-size: 1.01rem;
+      }
+      .breadcrumb-content a {
+        color: #3182ce;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .breadcrumb-content a:hover {
+        color: #2b6cb0;
+        text-decoration: underline;
+      }
+      .breadcrumb-content .divider {
+        color: #a0aec0;
+        font-size: 1.1em;
+        margin: 0 2px;
+      }
+      .breadcrumb-content .current {
+        color: #2d3748;
+        font-weight: 600;
+      }
+    </style>
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="header-top-left">
-                    <p>Welcome to our store</p>
-                </div>
-                <div class="header-top-right">
-                    <a href="#">My Account</a>
-                    <a href="#">Wishlist</a>
-                    <a href="#">Login</a>
-                </div>
-            </div>
-        </div>
-        <div class="header-main">
-            <div class="container">
-                <div class="logo">
-                    <a href="index.html">
-                        <h1>Ecommerce</h1>
-                    </a>
-                </div>
-                <div class="search-bar">
-                    <input type="text" placeholder="Search products...">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
-                <div class="header-actions">
-                    <a href="#" class="header-icon"><i class="far fa-heart"></i></a>
-                    <a href="#" class="header-icon"><i class="fas fa-shopping-cart"></i></a>
-                </div>
-            </div>
-        </div>
-        <nav class="main-nav">
-            <div class="container">
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="#" class="active">Shop</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo">Brand</div>
+    <div class="search-bar">
+      <select>
+        <option>All category</option>
+      </select>
+      <input type="text" placeholder="Search"/>
+      <button>Search</button>
+    </div>
+    <div class="header-icons">
+      <div>Profile</div>
+      <div>Message</div>
+      <div>Orders</div>
+      <div>My cart</div>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="page-header">
-                <h1>Products</h1>
-                <p>Showing all products</p>
-            </div>
-            
-            <!-- Products will be listed here -->
-            <div class="products-grid">
-                <!-- Product items will be dynamically added here -->
-            </div>
-        </div>
-    </main>
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Hot Deals</a></li>
+      <li><a href="#">Categories</a></li>
+      <li><a href="#">Laptops</a></li>
+      <li><a href="#">Smartphones</a></li>
+      <li><a href="#">Cameras</a></li>
+      <li><a href="#">Accessories</a></li>
+    </ul>
+  </nav>
 
-    <!-- Newsletter Section -->
-    <section class="newsletter">
-        <div class="container">
-            <div class="newsletter-content">
-                <h2>Subscribe to Our Newsletter</h2>
-                <p>Get the latest updates on new products and upcoming sales</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email address" required>
-                    <button type="submit" class="btn btn-primary">Subscribe</button>
-                </form>
-                <p class="form-note">By subscribing, you agree to our Privacy Policy and consent to receive updates.</p>
-            </div>
-        </div>
-    </section>
+  <!-- Breadcrumb Section -->
+  <div class="breadcrumb-section">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <a href="index.html">Home</a>
+        <span class="divider">/</span>
+        <a href="#">Shop</a>
+        <span class="divider">/</span>
+        <span class="current">Products</span>
+      </div>
+    </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-widgets">
-                <div class="footer-widget">
-                    <h3>About Us</h3>
-                    <p>Your one-stop shop for all your needs. We provide quality products at affordable prices.</p>
-                </div>
-                <div class="footer-widget">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Shop</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-widget">
-                    <h3>Customer Service</h3>
-                    <ul>
-                        <li><a href="#">My Account</a></li>
-                        <li><a href="#">Order Tracking</a></li>
-                        <li><a href="#">Wishlist</a></li>
-                        <li><a href="#">FAQs</a></li>
-                    </ul>
-                </div>
-                <div class="footer-widget">
-                    <h3>Contact Us</h3>
-                    <p>Email: info@example.com</p>
-                    <p>Phone: +1 234 567 890</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 Ecommerce. All rights reserved.</p>
-                <div class="payment-methods">
-                    <i class="fab fa-cc-visa"></i>
-                    <i class="fab fa-cc-mastercard"></i>
-                    <i class="fab fa-cc-paypal"></i>
-                </div>
-            </div>
+  <!-- Main Content -->
+  <main class="main-content shop-page">
+    <div class="container">
+      <div class="shop-header">
+        <h1 class="page-title">Products</h1>
+        <div class="shop-actions">
+          <div class="view-options">
+            <button class="view-option active" data-view="grid"><i class="fas fa-th"></i></button>
+            <button class="view-option" data-view="list"><i class="fas fa-list"></i></button>
+          </div>
+          <div class="sort-options">
+            <span>Sort by:</span>
+            <select id="sort-by">
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="newest">Newest Arrivals</option>
+              <option value="bestselling">Best Selling</option>
+            </select>
+          </div>
+          <div class="show-options">
+            <span>Show:</span>
+            <select id="show-count">
+              <option value="12">12</option>
+              <option value="24">24</option>
+              <option value="36">36</option>
+            </select>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script>
+      <div class="shop-content">
+        <!-- Sidebar -->
+        <aside class="shop-sidebar">
+          <!-- Categories Widget -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Categories</h3>
+            <ul class="category-list">
+              <li class="active"><a href="#">All Categories</a></li>
+              <li><a href="#">Electronics</a></li>
+              <li><a href="#">Fashion</a></li>
+              <li><a href="#">Home & Garden</a></li>
+              <li><a href="#">Sports & Outdoors</a></li>
+              <li><a href="#">Beauty</a></li>
+              <li><a href="#">Toys & Games</a></li>
+              <li><a href="#">Books</a></li>
+            </ul>
+          </div>
+
+          <!-- Price Filter -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Filter by Price</h3>
+            <div class="price-range-slider">
+              <div class="price-range"></div>
+              <div class="price-inputs">
+                <input type="text" id="min-price" value="$0">
+                <span>-</span>
+                <input type="text" id="max-price" value="$1000">
+                <button class="filter-btn">Filter</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Filter -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Color</h3>
+            <div class="color-options">
+              <label class="color-option" style="background-color: #000000;">
+                <input type="checkbox" name="color" value="black">
+                <span class="checkmark"></span>
+              </label>
+              <label class="color-option" style="background-color: #ffffff; border: 1px solid #ddd;">
+                <input type="checkbox" name="color" value="white">
+                <span class="checkmark"></span>
+              </label>
+              <label class="color-option" style="background-color: #ff0000;">
+                <input type="checkbox" name="color" value="red">
+                <span class="checkmark"></span>
+              </label>
+              <label class="color-option" style="background-color: #0000ff;">
+                <input type="checkbox" name="color" value="blue">
+                <span class="checkmark"></span>
+              </label>
+              <label class="color-option" style="background-color: #00ff00;">
+                <input type="checkbox" name="color" value="green">
+                <span class="checkmark"></span>
+              </label>
+              <label class="color-option" style="background-color: #ffff00;">
+                <input type="checkbox" name="color" value="yellow">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Size Filter -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Size</h3>
+            <div class="size-options">
+              <label class="size-option">
+                <input type="checkbox" name="size" value="xs">
+                <span>XS</span>
+              </label>
+              <label class="size-option">
+                <input type="checkbox" name="size" value="s">
+                <span>S</span>
+              </label>
+              <label class="size-option">
+                <input type="checkbox" name="size" value="m" checked>
+                <span>M</span>
+              </label>
+              <label class="size-option">
+                <input type="checkbox" name="size" value="l">
+                <span>L</span>
+              </label>
+              <label class="size-option">
+                <input type="checkbox" name="size" value="xl">
+                <span>XL</span>
+              </label>
+              <label class="size-option">
+                <input type="checkbox" name="size" value="xxl">
+                <span>XXL</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Brand Filter -->
+          <div class="sidebar-widget">
+            <h3 class="widget-title">Brand</h3>
+            <div class="brand-options">
+              <label class="brand-option">
+                <input type="checkbox" name="brand" value="nike">
+                <span>Nike</span>
+              </label>
+              <label class="brand-option">
+                <input type="checkbox" name="brand" value="adidas">
+                <span>Adidas</span>
+              </label>
+              <label class="brand-option">
+                <input type="checkbox" name="brand" value="puma" checked>
+                <span>Puma</span>
+              </label>
+              <label class="brand-option">
+                <input type="checkbox" name="brand" value="under-armour">
+                <span>Under Armour</span>
+              </label>
+              <label class="brand-option">
+                <input type="checkbox" name="brand" value="reebok">
+                <span>Reebok</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Special Offers -->
+          <div class="sidebar-widget special-offers">
+            <h3 class="widget-title">Special Offers</h3>
+            <div class="special-offer">
+              <div class="offer-badge">-30%</div>
+              <div class="offer-content">
+                <h4>Summer Sale</h4>
+                <p>Up to 30% off on selected items</p>
+                <a href="#" class="shop-now">Shop Now</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="product-grid-container">
+          <div class="product-grid">
+            <section class="product-list">
+              <div class="product-item">
+                <img src="images/gocamon.png" alt="Canon Camera">
+                <div class="product-details">
+                  <h3>Canon Camera EOS 2000, Black 10x zoom</h3>
+                  <p class="price">
+                    $998.00 <span class="old-price">$1128.00</span>
+                  </p>
+                  <p class="meta">
+                    ⭐ 7.5 • 154 orders • <span class="green">Free Shipping</span>
+                  </p>
+                  <p class="desc">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                  </p>
+                  <a href="product-detail.html?product=canon-eos-2000" class="view-link">View details</a>
+                </div>
+                <div class="wishlist-icon">🤍</div>
+              </div>
+
+              <!-- Additional product items can be added here -->
+              <div class="product-item">
+                <img src="images/nikkpn dslr.webp" alt="Nikon DSLR Camera">
+                <div class="product-details">
+                  <h3>Nikon D3500 DSLR Camera with 18-55mm Lens</h3>
+                  <p class="price">
+                    $749.00 <span class="old-price">$899.00</span>
+                  </p>
+                  <p class="meta">
+                    ⭐ 8.2 • 98 orders • <span class="green">Free Shipping</span>
+                  </p>
+                  <p class="desc">
+                    High-quality DSLR camera perfect for beginners and enthusiasts with excellent image quality
+                  </p>
+                  <a href="product-detail.html?product=nikon-d3500" class="view-link">View details</a>
+                </div>
+                <div class="wishlist-icon">🤍</div>
+              </div>
+
+              <div class="product-item">
+                <img src="images/Sony Alpha a7 III Mirrorless Camera.jpg" alt="Sony Alpha Camera">
+                <div class="product-details">
+                  <h3>Sony Alpha a7 III Mirrorless Camera</h3>
+                  <p class="price">
+                    $1999.00 <span class="old-price">$2199.00</span>
+                  </p>
+                  <p class="meta">
+                    ⭐ 9.1 • 245 orders • <span class="green">Free Shipping</span>
+                  </p>
+                  <p class="desc">
+                    Professional full-frame mirrorless camera with 24.2MP sensor and 4K HDR video
+                  </p>
+                  <a href="product-detail.html?product=sony-a7iii" class="view-link">View details</a>
+                </div>
+                <div class="wishlist-icon">🤍</div>
+              </div>
+            </section>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="pagination">
+            <a href="#" class="page-nav disabled">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="#" class="page-number active">1</a>
+            <a href="#" class="page-number">2</a>
+            <a href="#" class="page-number">3</a>
+            <a href="#" class="page-number">4</a>
+            <a href="#" class="page-number">5</a>
+            <a href="#" class="page-nav">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="newsletter-content">
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Get the latest updates on new products and upcoming sales</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <p class="terms">
+          By subscribing, you agree to our <a href="#">Privacy Policy</a> and consent to receive updates.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <!-- Logo and Description -->
+      <div class="footer-about">
+        <div class="footer-logo">
+          <h2>Ecommerce</h2>
+        </div>
+        <p class="footer-description">
+          We are a leading e-commerce platform offering a wide range of products at competitive prices.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-links">
+        <h3 class="footer-heading">Quick Links</h3>
+        <ul class="footer-menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Categories -->
+      <div class="footer-links">
+        <h3 class="footer-heading">Categories</h3>
+        <ul class="footer-menu">
+          <li><a href="productlist.html?category=electronics">Electronics</a></li>
+          <li><a href="productlist.html?category=clothing">Clothing</a></li>
+          <li><a href="productlist.html?category=home">Home & Garden</a></li>
+          <li><a href="productlist.html?category=beauty">Beauty</a></li>
+          <li><a href="productlist.html?category=sports">Sports & Outdoors</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="footer-contact">
+        <h3 class="footer-heading">Contact Us</h3>
+        <div class="contact-info">
+          <p><i class="fas fa-map-marker-alt"></i> 123 Ecommerce St, City, Country</p>
+          <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+          <p><i class="fas fa-envelope"></i> info@ecommerce.com</p>
+          <p><i class="fas fa-clock"></i> Mon - Fri: 9:00 - 20:00</p>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="footer-newsletter">
+        <h3 class="footer-heading">Newsletter</h3>
+        <p>Subscribe to get special offers and updates</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Your email address" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <div class="payment-methods">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fab fa-cc-apple-pay"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-container">
+        <p class="copyright">
+          &copy; 2023 Ecommerce. All rights reserved.
+        </p>
+        <div class="legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Shipping Policy</a>
+          <a href="#">Refund Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom Scripts -->
     <script src="script.js"></script>
 </body>
 </html>

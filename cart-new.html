@@ -322,7 +322,15 @@
             document.querySelector('.cart-summary div:nth-child(2) p:last-child').textContent = '$' + tax.toFixed(2);
             document.querySelector('.order-total p:last-child').textContent = '$' + total.toFixed(2);
         }
-
+        // Handle checkout button click
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', function() {
+                // Redirect to the checkout page
+                window.location.href = 'checkout-new.html';
+            });
+        }
+        
         // Initialize cart total
         updateCartTotal();
     </script>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ecommerce Home Page</title>
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    /* Recommended Products Section Width */
+    .recommended-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    /* Recommended Products Grid Styling */
+    .recommended-section .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .recommended-section .product-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-align: center;
+    }
+    
+    .recommended-section .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    
+    .recommended-section .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .recommended-section .product-card h4 {
+      margin: 0.5rem 0;
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    
+    .recommended-section .product-card .price {
+      color: #3182ce;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    
+    .recommended-section .product-card .rating {
+      color: #f6ad55;
+      font-size: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .recommended-section .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .recommended-section .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo">Brand</div>
+    <div class="search-bar">
+      <select>
+        <option>All category</option>
+      </select>
+      <input type="text" placeholder="Search"/>
+      <button>Search</button>
+    </div>
+    <div class="header-icons">
+      <div>Profile</div>
+      <div>Message</div>
+      <div>Orders</div>
+      <div>
+      <a href="cart.html" class="header-icon">
+        <i class="fas fa-shopping-cart"></i> My Cart
+      </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <ul>
+      <li>All category</li>
+      <li>Hot offers</li>
+      <li>Gift boxes</li>
+      <li>Projects</li>
+      <li>Menu item</li>
+    </ul>
+    <div class="lang-select">
+      <span>English, USD</span> | <span>Ship to</span>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="left-menu">
+      <ul>
+        <li><a href="productlist.html?category=automobiles">Automobiles</a></li>
+        <li><a href="productlist.html?category=clothes">Clothes and wear</a></li>
+        <li><a href="productlist.html?category=home-interiors">Home interiors</a></li>
+        <li><a href="productlist.html?category=computer-tech">Computer and tech</a></li>
+        <li><a href="productlist.html?category=tools">Tools, equipments</a></li>
+        <li><a href="productlist.html?category=sports">Sports and outdoor</a></li>
+        <li><a href="productlist.html?category=pets">Animal and pets</a></li>
+        <li><a href="productlist.html?category=machinery">Machinery tools</a></li>
+        <li><a href="productlist.html?category=more">More category</a></li>
+      </ul>
+    </div>
+
+    <div class="hero-banner">
+      <h2>Latest trending <br> <span>Electronic items</span></h2>
+      <button>Learn more</button>
+      <img src="images/headphone1.jfif" alt="Headphones" />
+    </div>
+
+    <div class="auth-cards">
+      <div class="card">Hi, user<br><button>Join now</button> <br><button>Login</button></div>
+      <div class="card orange">Get $10 off <br> with new supplier</div>
+      <div class="card blue">Send quotes <br> with supplier preferences</div>
+    </div>
+  </section>
+
+ <!-- Deals and Offers Section -->
+<section class="deals-section">
+  <div class="deals-header">
+    <h3>Deals and offers</h3>
+    <p>Hygiene equipments</p>
+    <div class="timer" id="deal-timer">
+      <span id="days">00</span>D :
+      <span id="hours">00</span>H :
+      <span id="minutes">00</span>M :
+      <span id="seconds">00</span>S
+    </div>
+  </div>
+
+  <div class="product-slider">
+    <div class="product-card">
+      <img src="images/smartwatch1.webp" />
+      <p>Smart watches</p>
+      <span class="discount">-25%</span>
+    </div>
+    <div class="product-card">
+      <img src="images/laptop.png" />
+      <p>Laptops</p>
+      <span class="discount">-15%</span>
+    </div>
+    <div class="product-card">
+      <img src="images/gopro camera.png" />
+      <p>GoPro Cameras</p>
+      <span class="discount">-40%</span>
+    </div>
+    <div class="product-card">
+      <img src="images/headphone1.jfif" />
+      <p>Headphones</p>
+      <span class="discount">-25%</span>
+    </div>
+    <div class="product-card">
+      <img src="images/gocamon.png" />
+      <p>Canon Cameras</p>
+      <span class="discount">-25%</span>
+    </div>
+  </div>
+</section>
+
+<!-- Home and Outdoor Section -->
+<section class="category-section">
+  <div class="category-header">
+    <h3>Home and Outdoor</h3>
+    <a href="#">View all</a>
+  </div>
+  <div class="category-products">
+    <div class="category-card">
+      <img src="images/wooden chair.jfif" alt="Chair">
+      <p>Wooden Chair</p>
+      <span>$25.00</span>
+    </div>
+    <div class="category-card">
+      <img src="images/lamp.jfif" alt="Lamp">
+      <p>Decorative Lamp</p>
+      <span>$18.00</span>
+    </div>
+    <div class="category-card">
+      <img src="images/sofa.jpg" alt="Sofa">
+      <p>Modern Sofa</p>
+      <span>$120.00</span>
+    </div>
+    <div class="category-card">
+      <img src="images/plant pot.jpg" alt="Plant Pot">
+      <p>Indoor Plant Pot</p>
+      <span>$10.00</span>
+    </div>
+  </div>
+</section>
+
+<!-- Customer Electronics and Gadgets Section -->
+<section class="category-section">
+  <div class="category-header">
+    <h3>Customer Electronics and Gadgets</h3>
+    <a href="productlist.html?category=electronics">View all</a>
+  </div>
+  <div class="category-products">
+    <div class="category-card">
+      <img src="images/smartphone.jfif" alt="Smartphone">
+      <p>Smartphones</p>
+      <span>$299.99</span>
+    </div>
+    <div class="category-card">
+      <img src="images/laptop.png" alt="Laptop">
+      <p>Laptops</p>
+      <span>$699.99</span>
+    </div>
+    <div class="category-card">
+      <img src="images/headphone1.jfif" alt="Headphones">
+      <p>Wireless Headphones</p>
+      <span>$99.99</span>
+    </div>
+    <div class="category-card">
+      <img src="images/smartwatch1.webp" alt="Smartwatch">
+      <p>Smart Watches</p>
+      <span>$199.99</span>
+    </div>
+    <div class="category-card">
+      <img src="images/tablet.jfif" alt="Tablet">
+      <p>Tablets</p>
+      <span>$249.99</span>
+    </div>
+  </div>
+</section>
+
+<!-- Suppliers Section -->
+<section class="suppliers-section">
+  <div class="section-header">
+    <h2>An easy way to send requests to all suppliers</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  </div>
+  
+  <div class="suppliers-steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h4>Send quote to suppliers</h4>
+      <p>Send your requirements and get responses from verified suppliers</p>
+    </div>
+    
+    <div class="step-connector"></div>
+    
+    <div class="step">
+      <div class="step-number">2</div>
+      <h4>Review the responses</h4>
+      <p>Compare quotes and select the best offers from multiple suppliers</p>
+    </div>
+    
+    <div class="step-connector"></div>
+    
+    <div class="step">
+      <div class="step-number">3</div>
+      <h4>Place your order</h4>
+      <p>Finalize the deal and get your products delivered</p>
+    </div>
+  </div>
+  
+  <div class="suppliers-image">
+    <img src="https://via.placeholder.com/600x300" alt="Suppliers Illustration">
+  </div>
+</section>
+
+<!-- Recommended Products Section -->
+<section class="recommended-section">
+  <div class="section-header">
+    <h2>Recommended Products</h2>
+    <p>Check out our top picks for you</p>
+  </div>
+  
+  <!-- First Row - 3 Products -->
+  <div class="product-grid">
+    <div class="product-card">
+      <img src="images/earbud.jfif" alt="Wireless Earbuds">
+      <h4>Wireless Earbuds</h4>
+      <p class="price">$79.99</p>
+      <span class="rating">★★★★☆</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/smartwatch1.webp" alt="Smart Watch">
+      <h4>Smart Watch</h4>
+      <p class="price">$149.99</p>
+      <span class="rating">★★★★★</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/speaker bluetooth.webp" alt="Bluetooth Speaker">
+      <h4>Bluetooth Speaker</h4>
+      <p class="price">$59.99</p>
+      <span class="rating">★★★★☆</span>
+    </div>
+  </div>
+  
+  <!-- Second Row - 3 Products -->
+  <div class="product-grid" style="margin-top: 2rem;">
+    <div class="product-card">
+      <img src="images/powerbank.webp" alt="Power Bank">
+      <h4>Power Bank 10000mAh</h4>
+      <p class="price">$29.99</p>
+      <span class="rating">★★★☆☆</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/fitness band.jpg" alt="Fitness Band">
+      <h4>Fitness Band</h4>
+      <p class="price">$49.99</p>
+      <span class="rating">★★★★★</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/mousewireless.jfif" alt="Wireless Mouse">
+      <h4>Wireless Mouse</h4>
+      <p class="price">$24.99</p>
+      <span class="rating">★★★★☆</span>
+    </div>
+  </div>
+  
+  <!-- Third Row - 3 Products -->
+  <div class="product-grid" style="margin-top: 2rem;">
+    <div class="product-card">
+      <img src="images/keyboard.jfif" alt="Mechanical Keyboard">
+      <h4>Mechanical Keyboard</h4>
+      <p class="price">$89.99</p>
+      <span class="rating">★★★★★</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/usb chub.jpg" alt="USB-C Hub">
+      <h4>USB-C Hub</h4>
+      <p class="price">$34.99</p>
+      <span class="rating">★★★★☆</span>
+    </div>
+    
+    <div class="product-card">
+      <img src="images/lpatop stand.jfif" alt="Laptop Stand">
+      <h4>Laptop Stand</h4>
+      <p class="price">$19.99</p>
+      <span class="rating">★★★★★</span>
+    </div>
+  </div>
+  
+  <!-- Fourth Row - 1 Product -->
+  <div class="product-grid" style="margin-top: 2rem;">
+    <div class="product-card">
+      <img src="images/phone stand.jfif" alt="Phone Stand">
+      <h4>Phone Stand</h4>
+      <p class="price">$12.99</p>
+      <span class="rating">★★★★☆</span>
+    </div>
+  </div>
+  
+  <div class="view-more">
+    <a href="#" class="view-more-btn">View More Products</a>
+  </div>
+</section>
+
+<!-- Our Extra Services Section -->
+<section class="services-section">
+  <div class="section-header">
+    <h2>Our Extra Services</h2>
+    <p>We provide the best services for our customers</p>
+  </div>
+  
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <h4>Free Shipping</h4>
+      <p>Free shipping on all orders over $100</p>
+    </div>
+    
+    <div class="service-card">
+      <div class="service-icon">
+        <i class="fas fa-undo"></i>
+      </div>
+      <h4>30 Days Return</h4>
+      <p>30-day return policy for all products</p>
+    </div>
+    
+    <div class="service-card">
+      <div class="service-icon">
+        <i class="fas fa-headset"></i>
+      </div>
+      <h4>24/7 Support</h4>
+      <p>Our support team is always here to help</p>
+    </div>
+    
+    <div class="service-card">
+      <div class="service-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h4>Secure Payment</h4>
+      <p>100% secure payment methods</p>
+    </div>
+  </div>
+</section>
+
+<!-- Suppliers by Region Section -->
+<section class="suppliers-region-section">
+  <div class="section-header">
+    <h2>Suppliers by Region</h2>
+    <p>Connect with suppliers from around the world</p>
+  </div>
+  
+  <div class="region-grid">
+    <div class="region-card">
+      <div class="region-flag">
+        <img src="images/north america.png" alt="North America" style="width: 60px; height: 60px; object-fit: contain;">
+      </div>
+      <h4>North America</h4>
+      <p>200+ Suppliers</p>
+      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="region-card">
+      <div class="region-flag">
+        <img src="images/europe.png" alt="Europe" style="width: 60px; height: 60px; object-fit: contain;">
+      </div>
+      <h4>Europe</h4>
+      <p>350+ Suppliers</p>
+      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="region-card">
+      <div class="region-flag">
+        <img src="images/asia.png" alt="Asia" style="width: 60px; height: 60px; object-fit: contain;">
+      </div>
+      <h4>Asia</h4>
+      <p>500+ Suppliers</p>
+      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="region-card">
+      <div class="region-flag">
+        <img src="images/africa.png" alt="Africa" style="width: 60px; height: 60px; object-fit: contain;">
+      </div>
+      <h4>Africa</h4>
+      <p>150+ Suppliers</p>
+      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+    </div>
+    
+    <div class="region-card">
+      <div class="region-flag">
+        <img src="images/south america.png" alt="South America" style="width: 60px; height: 60px; object-fit: contain;">
+      </div>
+      <h4>South America</h4>
+      <p>180+ Suppliers</p>
+      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- Subscribe to Newsletter Section -->
+<section class="newsletter-section">
+  <div class="newsletter-container">
+    <div class="newsletter-content">
+      <h2>Subscribe to Our Newsletter</h2>
+      <p>Stay updated with our latest products and exclusive offers</p>
+      <form class="newsletter-form">
+        <div class="input-group">
+          <input type="email" placeholder="Enter your email address" required>
+          <button type="submit" class="subscribe-btn">Subscribe</button>
+        </div>
+        <div class="form-note">
+          <input type="checkbox" id="privacy-policy" required>
+          <label for="privacy-policy">I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a></label>
+        </div>
+      </form>
+    </div>
+    <div class="newsletter-image">
+      <img src="https://via.placeholder.com/400x300" alt="Newsletter Illustration">
+    </div>
+  </div>
+</section>
+
+<!-- Footer Section -->
+<footer class="site-footer">
+  <div class="footer-container">
+    <!-- Logo and Description -->
+    <div class="footer-about">
+      <div class="footer-logo">
+        <h2>LOGO</h2>
+      </div>
+      <p class="footer-description">
+        Best information about the company gies here but now lorem ipsum is
+      </p>
+      <div class="social-links">
+        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-links">
+      <h4 class="footer-heading">Quick Links</h4>
+      <ul class="footer-menu">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <!-- Categories -->
+    <div class="footer-links">
+      <h4 class="footer-heading">Categories</h4>
+      <ul class="footer-menu">
+        <li><a href="#">Electronics</a></li>
+        <li><a href="#">Fashion</a></li>
+        <li><a href="#">Home & Garden</a></li>
+        <li><a href="#">Health & Beauty</a></li>
+        <li><a href="#">Sports</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="footer-contact">
+      <h4 class="footer-heading">Contact Us</h4>
+      <div class="contact-info">
+        <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, New York, NY 10001</p>
+        <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+        <p><i class="fas fa-envelope"></i> info@example.com</p>
+      </div>
+      <div class="payment-methods">
+        <img src="https://via.placeholder.com/40x25" alt="Visa">
+        <img src="https://via.placeholder.com/40x25" alt="Mastercard">
+        <img src="https://via.placeholder.com/40x25" alt="PayPal">
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright and Legal -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-container">
+      <p class="copyright">© 2025 E-Commerce. All rights reserved.</p>
+      <div class="legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="products-container"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
