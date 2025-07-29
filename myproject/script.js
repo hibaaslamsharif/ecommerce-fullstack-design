@@ -52,6 +52,62 @@ function handleCategoryDisplay() {
   }
 }
 
+// Product List Fetch
+function fetchProducts() {
+  fetch('http://localhost:8000/products/')
+    .then(response => response.json())
+    .then(data => {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      data.forEach(product => {
+        const item = document.createElement('li');
+        item.textContent = product.name + ' - ' + product.category;
+        // Add Edit/Delete buttons
+        item.innerHTML += ` <button onclick="deleteProduct(${product.id})">Delete</button>`;
+        item.innerHTML += ` <button onclick="editProduct(${product.id}, '${product.name}', '${product.category}')">Edit</button>`;
+        productList.appendChild(item);
+      });
+    });
+}
+
+fetchProducts();
+
+document.getElementById('add-product-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('product-name').value;
+  const category = document.getElementById('product-category').value;
+  fetch('http://localhost:8000/products/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name, category})
+  })
+  .then(response => response.json())
+  .then(data => {
+    fetchProducts();
+    document.getElementById('add-product-form').reset();
+  });
+});
+
+function deleteProduct(id) {
+  fetch(`http://localhost:8000/products/${id}/`, {
+    method: 'DELETE'
+  })
+  .then(() => fetchProducts());
+}
+
+function editProduct(id, oldName, oldCategory) {
+  const name = prompt('Edit name:', oldName);
+  const category = prompt('Edit category:', oldCategory);
+  if (name && category) {
+    fetch(`http://localhost:8000/products/${id}/`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, category})
+    })
+    .then(() => fetchProducts());
+  }
+}
+
 // Initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
