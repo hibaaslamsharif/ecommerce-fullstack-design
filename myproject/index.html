@@ -291,8 +291,8 @@
 <!-- Recommended Products Section -->
 <section class="recommended-section">
   <div class="section-header">
-    <h2>Recommended Products</h2>
-    <p>Check out our top picks for you</p>
+    <h2>Featured Products</h2>
+    <div class="product-grid" id="featured-products"></div>
   </div>
   
   <!-- First Row - 3 Products -->
@@ -578,5 +578,25 @@
 <div id="products-container"></div>
 
 <script src="script.js"></script>
+<script>
+    // Fetch and display top 4 products as featured
+    fetch('http://localhost:8000/products/?limit=4')
+      .then(res => res.json())
+      .then(products => {
+        const grid = document.getElementById('featured-products');
+        grid.innerHTML = '';
+        products.slice(0, 4).forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h4>${product.name}</h4>
+            <div class="price">$${product.price}</div>
+            <a href="product-detail.html?id=${product.id}" class="btn">View Details</a>
+          `;
+          grid.appendChild(card);
+        });
+      });
+  </script>
 </body>
 </html>

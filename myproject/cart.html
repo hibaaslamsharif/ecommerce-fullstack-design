@@ -264,19 +264,57 @@
     </style>
 </head>
 <body>
-    <!-- Modern Header -->
-    <header class="main-header">
-        <div class="container">
-            <a href="index.html" class="logo">Brand</a>
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="shop.html">Shop</a>
-                <a href="deals.html">Deals</a>
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-            </nav>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="logo">Brand</div>
+        <div class="search-bar">
+            <select>
+                <option>All category</option>
+            </select>
+            <input type="text" placeholder="Search"/>
+            <button>Search</button>
+        </div>
+        <div class="header-icons">
+            <div>Profile</div>
+            <div>Message</div>
+            <div>Orders</div>
+            <div>
+                <a href="cart.html" class="header-icon">
+                    <i class="fas fa-shopping-cart"></i> My Cart
+                </a>
+            </div>
         </div>
     </header>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <ul>
+            <li>All category</li>
+            <li>Hot offers</li>
+            <li>Gift boxes</li>
+            <li>Projects</li>
+            <li>Menu item</li>
+        </ul>
+        <div class="lang-select">
+            <span>English, USD</span> | <span>Ship to</span>
+        </div>
+    </nav>
+    <!-- Breadcrumb Section -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="breadcrumb-content">
+                <a href="index.html">Home</a>
+                <span class="divider">/</span>
+                <a href="#">Shop</a>
+                <span class="divider">/</span>
+                <span class="current">Cart</span>
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 0 0 20px;">
+        <a href="index.html" style="margin-right: 20px; text-decoration: underline; color: #3182ce;">&larr; Home</a>
+        <a href="productlist.html" style="text-decoration: underline; color: #3182ce;">&larr; Products</a>
+    </div>
 
     <!-- Cart Section -->
     <section class="cart-section">
@@ -284,71 +322,7 @@
             <h1>Your Shopping Cart</h1>
             <p class="cart-count">You have 3 items in your cart</p>
             
-            <div class="cart-items">
-                <!-- Cart Item 1 -->
-                <div class="cart-item">
-                    <div class="cart-item-content">
-                        <img src="https://via.placeholder.com/100x100" alt="Product 1">
-                        <div class="cart-item-info">
-                            <h3>Smartphone Pro X1</h3>
-                            <p class="item-price">$499.99</p>
-                            <div class="item-options">
-                                <span>Color: Black</span>
-                                <span>Storage: 256GB</span>
-                            </div>
-                        </div>
-                        <div class="cart-item-actions">
-                            <div class="quantity-selector">
-                                <button class="qty-btn minus">-</button>
-                                <input type="number" value="1" min="1" class="qty-input">
-                                <button class="qty-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">Remove</button>
-                        </div>
-                    </div>
-                    <p class="item-total">$499.99</p>
-                </div>
-                
-                <!-- Cart Item 2 -->
-                <div class="cart-item">
-                    <div class="cart-item-content">
-                        <img src="https://via.placeholder.com/100x100" alt="Product 2">
-                        <div class="cart-item-info">
-                            <h3>Wireless Headphones</h3>
-                            <p class="item-price">$99.99</p>
-                        </div>
-                        <div class="cart-item-actions">
-                            <div class="quantity-selector">
-                                <button class="qty-btn minus">-</button>
-                                <input type="number" value="1" min="1" class="qty-input">
-                                <button class="qty-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">Remove</button>
-                        </div>
-                    </div>
-                    <p class="item-total">$99.99</p>
-                </div>
-                
-                <!-- Cart Item 3 -->
-                <div class="cart-item">
-                    <div class="cart-item-content">
-                        <img src="https://via.placeholder.com/100x100" alt="Product 3">
-                        <div class="cart-item-info">
-                            <h3>Smartwatch Pro</h3>
-                            <p class="item-price">$199.99</p>
-                        </div>
-                        <div class="cart-item-actions">
-                            <div class="quantity-selector">
-                                <button class="qty-btn minus">-</button>
-                                <input type="number" value="1" min="1" class="qty-input">
-                                <button class="qty-btn plus">+</button>
-                            </div>
-                            <button class="remove-item">Remove</button>
-                        </div>
-                    </div>
-                    <p class="item-total">$199.99</p>
-                </div>
-            </div>
+            <div class="cart-items-container" id="cart-items"></div>
             
             <div class="cart-summary">
                 <h3>Cart Summary</h3>
@@ -480,6 +454,40 @@
             const itemCount = document.querySelectorAll('.cart-item').length;
             const countText = itemCount + ' item' + (itemCount !== 1 ? 's' : '');
             document.querySelector('.cart-count').textContent = countText;
+        }
+    </script>
+    <script>
+        // Get cart from localStorage
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart.length === 0) {
+          document.getElementById('cart-items').innerHTML = '<p>Your cart is empty.</p>';
+        } else {
+          Promise.all(cart.map(id => fetch(`http://localhost:8000/products/${id}/`).then(res => res.json())))
+            .then(products => {
+              const container = document.getElementById('cart-items');
+              container.innerHTML = '';
+              products.forEach(product => {
+                const item = document.createElement('div');
+                item.className = 'cart-item';
+                item.innerHTML = `
+                  <img src="${product.image}" alt="${product.name}" style="width:100px;">
+                  <div>
+                    <h4>${product.name}</h4>
+                    <div class="price">$${product.price}</div>
+                    <div class="cat">Category: ${product.category}</div>
+                    <div class="stock">Stock: ${product.stock}</div>
+                    <button onclick="removeFromCart(${product.id})">Remove</button>
+                  </div>
+                `;
+                container.appendChild(item);
+              });
+            });
+        }
+        function removeFromCart(id) {
+          let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          cart = cart.filter(pid => pid !== id);
+          localStorage.setItem('cart', JSON.stringify(cart));
+          location.reload();
         }
     </script>
 </body>

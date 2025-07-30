@@ -302,62 +302,52 @@
         <!-- Product Grid -->
         <div class="product-grid-container">
           <div class="product-grid">
-            <section class="product-list">
-              <div class="product-item">
-                <img src="images/gocamon.png" alt="Canon Camera">
-                <div class="product-details">
-                  <h3>Canon Camera EOS 2000, Black 10x zoom</h3>
-                  <p class="price">
-                    $998.00 <span class="old-price">$1128.00</span>
-                  </p>
-                  <p class="meta">
-                    ⭐ 7.5 • 154 orders • <span class="green">Free Shipping</span>
-                  </p>
-                  <p class="desc">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                  </p>
-                  <a href="product-detail.html?product=canon-eos-2000" class="view-link">View details</a>
-                </div>
-                <div class="wishlist-icon">🤍</div>
-              </div>
-
-              <!-- Additional product items can be added here -->
-              <div class="product-item">
-                <img src="images/nikkpn dslr.webp" alt="Nikon DSLR Camera">
-                <div class="product-details">
-                  <h3>Nikon D3500 DSLR Camera with 18-55mm Lens</h3>
-                  <p class="price">
-                    $749.00 <span class="old-price">$899.00</span>
-                  </p>
-                  <p class="meta">
-                    ⭐ 8.2 • 98 orders • <span class="green">Free Shipping</span>
-                  </p>
-                  <p class="desc">
-                    High-quality DSLR camera perfect for beginners and enthusiasts with excellent image quality
-                  </p>
-                  <a href="product-detail.html?product=nikon-d3500" class="view-link">View details</a>
-                </div>
-                <div class="wishlist-icon">🤍</div>
-              </div>
-
-              <div class="product-item">
-                <img src="images/Sony Alpha a7 III Mirrorless Camera.jpg" alt="Sony Alpha Camera">
-                <div class="product-details">
-                  <h3>Sony Alpha a7 III Mirrorless Camera</h3>
-                  <p class="price">
-                    $1999.00 <span class="old-price">$2199.00</span>
-                  </p>
-                  <p class="meta">
-                    ⭐ 9.1 • 245 orders • <span class="green">Free Shipping</span>
-                  </p>
-                  <p class="desc">
-                    Professional full-frame mirrorless camera with 24.2MP sensor and 4K HDR video
-                  </p>
-                  <a href="product-detail.html?product=sony-a7iii" class="view-link">View details</a>
-                </div>
-                <div class="wishlist-icon">🤍</div>
-              </div>
-            </section>
+            <div class="search-bar" style="margin: 20px 0;">
+              <input type="text" id="search-input" placeholder="Search by name or category..." style="padding: 8px; width: 250px;">
+              <button id="search-btn" style="padding: 8px 16px;">Search</button>
+            </div>
+            <div class="product-grid" id="product-list"></div>
+            <script>
+              function fetchProducts(query = '') {
+                let url = 'http://localhost:8000/products/';
+                if (query) url += `?search=${encodeURIComponent(query)}`;
+                fetch(url)
+                  .then(res => res.json())
+                  .then(products => {
+                    const grid = document.getElementById('product-list');
+                    grid.innerHTML = '';
+                    products.forEach(product => {
+                      const card = document.createElement('div');
+                      card.className = 'product-card';
+                      card.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <h4>${product.name}</h4>
+                        <div class="price">$${product.price}</div>
+                        <a href="product-detail.html?id=${product.id}" class="btn">View Details</a>
+                        <button onclick="addToCart(${product.id})">Add to Cart</button>
+                      `;
+                      grid.appendChild(card);
+                    });
+                  });
+              }
+              fetchProducts();
+              document.getElementById('search-btn').onclick = function() {
+                const query = document.getElementById('search-input').value;
+                fetchProducts(query);
+              };
+              document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                  fetchProducts(this.value);
+                }
+              });
+              // Cart logic
+              function addToCart(id) {
+                let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                if (!cart.includes(id)) cart.push(id);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                alert('Added to cart!');
+              }
+            </script>
           </div>
           
           <!-- Pagination -->
