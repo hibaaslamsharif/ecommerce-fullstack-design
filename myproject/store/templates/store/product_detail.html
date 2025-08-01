@@ -1,0 +1,437 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Detail - Ecommerce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  
+  <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
+   <script src="{% static 'store/script.js' %}"></script>
+  <style>
+    .toast-notification {
+      position: fixed;
+      top: 32px;
+      right: 32px;
+      background: #38a169;
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 8px;
+      font-size: 1.08rem;
+      font-weight: 500;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(-20px);
+    }
+    .toast-notification.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    /* Modern Nav Bar */
+    .nav-bar {
+      background: #fff;
+      border-bottom: 1.5px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      margin-bottom: 0;
+    }
+    .nav-bar .nav-menu {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      min-height: 54px;
+    }
+    .nav-bar .nav-menu li {
+      display: inline-block;
+    }
+    .nav-bar .nav-menu a {
+      color: #2d3748;
+      text-decoration: none;
+      font-size: 1.08rem;
+      font-weight: 500;
+      padding: 8px 0 6px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-bottom 0.2s;
+      display: inline-block;
+    }
+    .nav-bar .nav-menu a:hover, .nav-bar .nav-menu a.active {
+      color: #3182ce;
+      border-bottom: 2px solid #3182ce;
+    }
+    @media (max-width: 800px) {
+      .nav-bar .nav-menu {
+        gap: 16px;
+        font-size: 0.98rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .nav-bar .nav-menu {
+        flex-wrap: wrap;
+        gap: 10px;
+        min-height: 44px;
+      }
+    }
+    /* Modern Breadcrumb */
+    .breadcrumb-section {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.7em 0;
+      font-size: 1.01rem;
+    }
+    .breadcrumb-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 1.01rem;
+    }
+    .breadcrumb-content a {
+      color: #3182ce;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb-content a:hover {
+      color: #2b6cb0;
+      text-decoration: underline;
+    }
+    .breadcrumb-content .divider {
+      color: #a0aec0;
+      font-size: 1.1em;
+      margin: 0 2px;
+    }
+    .breadcrumb-content .current {
+      color: #2d3748;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="top-header">
+    <div class="logo">Brand</div>
+    <div class="search-bar">
+      <select>
+        <option>All category</option>
+      </select>
+      <input type="text" placeholder="Search"/>
+      <button>Search</button>
+    </div>
+    <div class="header-icons">
+      <a href="#" class="header-icon"><i class="far fa-user"></i> Profile</a>
+      <a href="#" class="header-icon"><i class="far fa-comment"></i> Message</a>
+      <a href="#" class="header-icon"><i class="far fa-clipboard"></i> Orders</a>
+      <a href="cart.html" class="header-icon">
+        <i class="fas fa-shopping-cart"></i> My Cart
+      </a>
+     </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="productlist.html">Shop</a></li>
+      <li><a href="#">Categories</a></li>
+      <li><a href="#">Laptops</a></li>
+      <li><a href="#">Smartphones</a></li>
+      <li><a href="#">Cameras</a></li>
+      <li><a href="#">Accessories</a></li>
+    </ul>
+  </nav>
+
+  <!-- Breadcrumb Section -->
+  <div class="breadcrumb-section">
+    <div class="container">
+      <div class="breadcrumb-content">
+        <a href="index.html">Home</a>
+        <span class="divider">/</span>
+        <a href="productlist.html">Shop</a>
+        <span class="divider">/</span>
+        <span class="current">Product Details</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Section -->
+  <div class="container">
+    <div class="product-detail-container" id="product-detail"></div>
+  </div>
+
+  <!-- Product Tabs -->
+  <div class="product-detail-wrapper">
+    <div class="product-detail-card" id="product-detail">
+      <p>Loading product details...</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get("id");
+
+      if (productId) {
+        fetch(`/store/products/${productId}/`)
+          .then(response => response.json())
+          .then(product => {
+            const detailDiv = document.getElementById("product-detail");
+            detailDiv.innerHTML = `
+              <div class="product-box">
+                <img src="${product.image}" alt="${product.name}" width="300" />
+                <h2>${product.name}</h2>
+                <p class="price">Rs. ${product.price}</p>
+                <p class="desc">${product.description}</p>
+                <p><strong>Category:</strong> ${product.category}</p>
+                <p><strong>Stock:</strong> ${product.stock}</p>
+                <button class="add-cart">Add to Cart</button>
+                <br><br>
+                <a href="/store/products">← Back to Products</a>
+              </div>
+            `;
+          })
+          .catch(error => {
+            document.getElementById("product-detail").innerHTML = "<p>Product not found.</p>";
+          });
+      } else {
+        document.getElementById("product-detail").innerHTML = "<p>Invalid product ID.</p>";
+      }
+    });
+  </script>
+  <div class="product-tabs">
+    <div class="tab-header">
+      <button class="tab-btn active" data-tab="description">Description</button>
+      <button class="tab-btn" data-tab="specifications">Specifications</button>
+      <button class="tab-btn" data-tab="reviews">Reviews (154)</button>
+    </div>
+    
+    <div class="tab-content">
+      <div id="description" class="tab-pane active">
+        <h3>Product Description</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      </div>
+      
+      <div id="specifications" class="tab-pane">
+        <h3>Technical Specifications</h3>
+        <table class="specs-table">
+          <tr>
+            <th>Brand</th>
+            <td>GoPro</td>
+          </tr>
+          <tr>
+            <th>Model</th>
+            <td>HERO6 Black</td>
+          </tr>
+          <tr>
+            <th>Video Resolution</th>
+            <td>4K60, 2.7K120, 1080p240 video</td>
+          </tr>
+          <tr>
+            <th>Photo Resolution</th>
+            <td>12MP photos</td>
+          </tr>
+          <tr>
+            <th>Waterproof</th>
+            <td>Yes, up to 33ft (10m) without housing</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div id="reviews" class="tab-pane">
+        <h3>Customer Reviews</h3>
+        <div class="review">
+          <div class="review-header">
+            <div class="reviewer">John D.</div>
+            <div class="review-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+            <div class="review-date">April 15, 2023</div>
+          </div>
+          <div class="review-title">Great camera for action shots!</div>
+          <p class="review-text">The video quality is amazing, especially in 4K. Battery life could be better, but overall very satisfied with my purchase.</p>
+        </div>
+        
+        <div class="review">
+          <div class="review-header">
+            <div class="reviewer">Sarah M.</div>
+            <div class="review-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="review-date">March 28, 2023</div>
+          </div>
+          <div class="review-title">Perfect for my vlogging needs</div>
+          <p class="review-text">The image stabilization is a game changer. I use it for my travel vlogs and the footage is always smooth and crisp.</p>
+        </div>
+        
+        <button class="write-review-btn">Write a Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div class="related-section">
+    <h2>You May Also Like</h2>
+    <div class="related-products">
+      <div class="related-product">
+        <div class="product-badge">-15%</div>
+        <img src="https://via.placeholder.com/200x200?text=Product+1" alt="Related Product 1" />
+        <h3>GoPro HERO9 Black</h3>
+        <div class="price">$449.99 <span class="old-price">$529.99</span></div>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      
+      <div class="related-product">
+        <div class="product-badge new">New</div>
+        <img src="https://via.placeholder.com/200x200?text=Product+2" alt="Related Product 2" />
+        <h3>DJI Osmo Action</h3>
+        <div class="price">$349.00</div>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      
+      <div class="related-product">
+        <img src="https://via.placeholder.com/200x200?text=Product+3" alt="Related Product 3" />
+        <h3>Insta360 ONE X2</h3>
+        <div class="price">$429.99</div>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+      
+      <div class="related-product">
+        <img src="https://via.placeholder.com/200x200?text=Product+4" alt="Related Product 4" />
+        <h3>Sony RX0 II</h3>
+        <div class="price">$699.99</div>
+        <button class="add-to-cart-btn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>About Us</h3>
+        <p>We offer the best products at competitive prices with excellent customer service.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Newsletter</h3>
+        <p>Subscribe to get updates on new arrivals and special offers.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email" required />
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 YourBrand. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast-notification">Added successfully!</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+          tabBtns.forEach(btn => btn.classList.remove('active'));
+          tabPanes.forEach(pane => pane.classList.remove('active'));
+          this.classList.add('active');
+          const tabId = this.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+  
+      // PRODUCT DETAIL LOGIC
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+  
+      const detail = document.getElementById('product-detail');
+  
+      if (!id) {
+        detail.innerHTML = `<p style="color:red;">No product ID found in URL.</p>`;
+        return;
+      }
+  
+      fetch(`http://localhost:8000/products/${id}/`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Product not found.");
+          }
+          return res.json();
+        })
+        .then(product => {
+          detail.innerHTML = `
+            <div class="product-detail-card">
+              <img src="${product.image || 'https://via.placeholder.com/300x300'}" alt="${product.name}" style="max-width:300px;">
+              <h2>${product.name}</h2>
+              <div class="price">Rs. ${product.price}</div>
+              <p class="desc">${product.description}</p>
+              <p class="cat">Category: ${product.category?.name || 'N/A'}</p>
+              <p class="stock ${product.stock > 0 ? '' : 'out-of-stock'}">
+                ${product.stock > 0 ? 'In Stock: ' + product.stock : 'Out of Stock'}
+              </p>
+              <button class="add-cart" onclick="addToCart(${product.id})" ${product.stock <= 0 ? 'disabled' : ''}>
+                ${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+              </button>
+            </div>
+          `;
+        })
+        .catch(error => {
+          detail.innerHTML = `<p style="color:red;">${error.message}</p>`;
+        });
+  
+      // Add to cart function
+      window.addToCart = function (id) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (!cart.includes(id)) cart.push(id);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        const toast = document.getElementById('toast');
+        if (toast) {
+          toast.classList.add('show');
+          setTimeout(() => {
+            toast.classList.remove('show');
+          }, 2000);
+        }
+      };
+    });
+  </script>
+  
+</body>
+</html>
