@@ -1,10 +1,14 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - Ecommerce</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
+    <script src="{% static 'store/script.js' %}"></script>
+
     <style>
       /* Modern Nav Bar */
       .nav-bar {
@@ -308,6 +312,36 @@
             </div>
             <div class="product-grid" id="product-list"></div>
             <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                fetch("http://127.0.0.1:8000/store/products/")
+                  .then((response) => response.json())
+                  .then((data) => {
+                    const productList = document.querySelector(".product-list");
+                    productList.innerHTML = ""; // Clear existing static content
+            
+                    data.forEach((product) => {
+                      const productCard = document.createElement("div");
+                      productCard.className = "product-card";
+            
+                      productCard.innerHTML = `
+                        <a href="product-detail.html?id=${product.id}">
+                          <img src="${product.image}" alt="${product.name}" />
+                          <h3>${product.name}</h3>
+                          <p>${product.description}</p>
+                          <p>PKR ${product.price}</p>
+                        </a>
+                      `;
+            
+                      productList.appendChild(productCard);
+                    });
+                  })
+                  .catch((error) => {
+                    console.error("Error fetching products:", error);
+                  });
+              });
+            </script>
+            
+            <script>
               function fetchProducts(query = '') {
                 let url = 'http://localhost:8000/products/';
                 if (query) url += `?search=${encodeURIComponent(query)}`;
@@ -348,7 +382,25 @@
                 alert('Added to cart!');
               }
             </script>
-          </div>
+             <h1>All Products</h1>
+
+             <div class="product-list">
+               {% for product in products %}
+                 <div class="product">
+                   {% if product.image %}
+                     <img src="{{ product.image }}" alt="{{ product.name }}" width="200" />
+                   {% endif %}
+                   <h2>{{ product.name }}</h2>
+                   <p>{{ product.description }}</p>
+                   <p>Price: Rs {{ product.price }}</p>
+                   <a href="{% url 'product_detail' %}?id={{ product.id }}">View Detail</a>
+
+                 </div>
+               {% empty %}
+                 <p>No products available.</p>
+               {% endfor %}
+             </div>
+          
           
           <!-- Pagination -->
           <div class="pagination">

@@ -54,7 +54,7 @@ function handleCategoryDisplay() {
 
 // Product List Fetch
 function fetchProducts() {
-  fetch('http://localhost:8000/products/')
+  fetch('http://localhost:8000/store/api/products/')
     .then(response => response.json())
     .then(data => {
       const productList = document.getElementById('product-list');
@@ -76,7 +76,7 @@ document.getElementById('add-product-form').addEventListener('submit', function(
   e.preventDefault();
   const name = document.getElementById('product-name').value;
   const category = document.getElementById('product-category').value;
-  fetch('http://localhost:8000/products/', {
+  fetch('http://localhost:8000/store/api/products/', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({name, category})
@@ -89,7 +89,7 @@ document.getElementById('add-product-form').addEventListener('submit', function(
 });
 
 function deleteProduct(id) {
-  fetch(`http://localhost:8000/products/${id}/`, {
+  fetch(`http://localhost:8000/store/api/products/${id}/`, {
     method: 'DELETE'
   })
   .then(() => fetchProducts());
@@ -99,7 +99,7 @@ function editProduct(id, oldName, oldCategory) {
   const name = prompt('Edit name:', oldName);
   const category = prompt('Edit category:', oldCategory);
   if (name && category) {
-    fetch(`http://localhost:8000/products/${id}/`, {
+    fetch(`http://localhost:8000/store/api/products/${id}/`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name, category})

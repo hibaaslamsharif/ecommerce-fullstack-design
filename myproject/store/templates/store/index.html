@@ -1,10 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ecommerce Home Page</title>
-  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="{% static 'store/css/index.css' %}">
+  <script src="{% static 'store/script.js' %}"></script>
+  
   <style>
     /* Recommended Products Section Width */
     .recommended-section {
@@ -77,6 +80,7 @@
       }
     }
   </style>
+  
 </head>
 <body>
 

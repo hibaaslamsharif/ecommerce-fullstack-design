@@ -1,14 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Detail - Ecommerce</title>
-  <link rel="stylesheet" href="index.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  
+  <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
+   <script src="{% static 'store/script.js' %}"></script>
   <style>
     .toast-notification {
       position: fixed;
@@ -167,6 +170,44 @@
   </div>
 
   <!-- Product Tabs -->
+  <div class="product-detail-wrapper">
+    <div class="product-detail-card" id="product-detail">
+      <p>Loading product details...</p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get("id");
+
+      if (productId) {
+        fetch(`/store/products/${productId}/`)
+          .then(response => response.json())
+          .then(product => {
+            const detailDiv = document.getElementById("product-detail");
+            detailDiv.innerHTML = `
+              <div class="product-box">
+                <img src="${product.image}" alt="${product.name}" width="300" />
+                <h2>${product.name}</h2>
+                <p class="price">Rs. ${product.price}</p>
+                <p class="desc">${product.description}</p>
+                <p><strong>Category:</strong> ${product.category}</p>
+                <p><strong>Stock:</strong> ${product.stock}</p>
+                <button class="add-cart">Add to Cart</button>
+                <br><br>
+                <a href="/store/products">← Back to Products</a>
+              </div>
+            `;
+          })
+          .catch(error => {
+            document.getElementById("product-detail").innerHTML = "<p>Product not found.</p>";
+          });
+      } else {
+        document.getElementById("product-detail").innerHTML = "<p>Invalid product ID.</p>";
+      }
+    });
+  </script>
   <div class="product-tabs">
     <div class="tab-header">
       <button class="tab-btn active" data-tab="description">Description</button>
@@ -323,104 +364,74 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast-notification">Added successfully!</div>
-
   <script>
-    // Tab functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const tabBtns = document.querySelectorAll('.tab-btn');
       const tabPanes = document.querySelectorAll('.tab-pane');
-      
       tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          // Remove active class from all buttons and panes
+        btn.addEventListener('click', function () {
           tabBtns.forEach(btn => btn.classList.remove('active'));
           tabPanes.forEach(pane => pane.classList.remove('active'));
-          
-          // Add active class to clicked button and corresponding pane
           this.classList.add('active');
           const tabId = this.getAttribute('data-tab');
           document.getElementById(tabId).classList.add('active');
         });
       });
-      
-      // Quantity selector
-      const quantityInput = document.getElementById('quantity');
-      const decreaseBtn = document.getElementById('decrease-qty');
-      const increaseBtn = document.getElementById('increase-qty');
-      
-      decreaseBtn.addEventListener('click', function() {
-        let value = parseInt(quantityInput.value);
-        if (value > 1) {
-          quantityInput.value = value - 1;
-        }
-      });
-      
-      increaseBtn.addEventListener('click', function() {
-        let value = parseInt(quantityInput.value);
-        quantityInput.value = value + 1;
-      });
-      
-      // Color selector
-      const colorOptions = document.querySelectorAll('.color-option');
-      colorOptions.forEach(option => {
-        option.addEventListener('click', function() {
-          colorOptions.forEach(opt => opt.classList.remove('active'));
-          this.classList.add('active');
+  
+      // PRODUCT DETAIL LOGIC
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+  
+      const detail = document.getElementById('product-detail');
+  
+      if (!id) {
+        detail.innerHTML = `<p style="color:red;">No product ID found in URL.</p>`;
+        return;
+      }
+  
+      fetch(`http://localhost:8000/products/${id}/`)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Product not found.");
+          }
+          return res.json();
+        })
+        .then(product => {
+          detail.innerHTML = `
+            <div class="product-detail-card">
+              <img src="${product.image || 'https://via.placeholder.com/300x300'}" alt="${product.name}" style="max-width:300px;">
+              <h2>${product.name}</h2>
+              <div class="price">Rs. ${product.price}</div>
+              <p class="desc">${product.description}</p>
+              <p class="cat">Category: ${product.category?.name || 'N/A'}</p>
+              <p class="stock ${product.stock > 0 ? '' : 'out-of-stock'}">
+                ${product.stock > 0 ? 'In Stock: ' + product.stock : 'Out of Stock'}
+              </p>
+              <button class="add-cart" onclick="addToCart(${product.id})" ${product.stock <= 0 ? 'disabled' : ''}>
+                ${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+              </button>
+            </div>
+          `;
+        })
+        .catch(error => {
+          detail.innerHTML = `<p style="color:red;">${error.message}</p>`;
         });
-      });
-      
-      // Thumbnail click to change main image
-      const thumbnails = document.querySelectorAll('.thumbnail');
-      const mainImg = document.querySelector('.main-img');
-      
-      thumbnails.forEach(thumb => {
-        thumb.addEventListener('click', function() {
-          mainImg.src = this.src.replace('100x100', '500x500');
-          thumbnails.forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
-
-      // Add to Cart notification
-      const addCartBtn = document.querySelector('.add-cart');
-      const toast = document.getElementById('toast');
-      if (addCartBtn && toast) {
-        addCartBtn.addEventListener('click', function() {
+  
+      // Add to cart function
+      window.addToCart = function (id) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (!cart.includes(id)) cart.push(id);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        const toast = document.getElementById('toast');
+        if (toast) {
           toast.classList.add('show');
           setTimeout(() => {
             toast.classList.remove('show');
           }, 2000);
-        });
-      }
+        }
+      };
     });
-
-    // Get product id from URL
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    if (id) {
-      fetch(`http://localhost:8000/products/${id}/`)
-        .then(res => res.json())
-        .then(product => {
-          const detail = document.getElementById('product-detail');
-          detail.innerHTML = `
-            <div class="product-detail-card">
-              <img src="${product.image}" alt="${product.name}" style="max-width:300px;">
-              <h2>${product.name}</h2>
-              <div class="price">$${product.price}</div>
-              <div class="desc">${product.description}</div>
-              <div class="cat">Category: ${product.category}</div>
-              <div class="stock">Stock: ${product.stock}</div>
-              <button onclick="addToCart(${product.id})">Add to Cart</button>
-            </div>
-          `;
-        });
-    }
-    function addToCart(id) {
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      if (!cart.includes(id)) cart.push(id);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert('Added to cart!');
-    }
   </script>
+  
 </body>
 </html>
