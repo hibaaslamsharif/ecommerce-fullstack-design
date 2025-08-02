@@ -13,11 +13,217 @@
   <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
    <script src="{% static 'store/script.js' %}"></script>
   <style>
+    :root {
+        --primary-color: #e53e3e;  /* Red 600 */
+        --primary-dark: #c53030;   /* Red 700 */
+        --primary-light: #feb2b2;  /* Red 200 */
+        --primary-bg: #fff5f5;     /* Red 50 */
+    }
+    
+    /* Base styles */
+    body {
+        background-color: #fff5f5;
+        font-family: 'Roboto', Arial, sans-serif;
+    }
+    
+    /* Header styles */
+    .top-header {
+        background-color: white;
+        border-bottom: 1px solid #fed7d7;
+        padding: 1rem 0;
+    }
+    
+    .logo {
+        color: #e53e3e;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    
+    .search-bar input {
+        border: 1px solid #fed7d7;
+    }
+    
+    .search-bar button {
+        background-color: #e53e3e;
+        color: white;
+        border: none;
+    }
+    
+    .cart-icon {
+        color: #e53e3e;
+    }
+    
+    .cart-count {
+        background-color: #e53e3e;
+        color: white;
+    }
+    
+    /* Product detail styles */
+    .product-detail-container {
+        background: white;
+        border: 1px solid #fed7d7;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .product-gallery {
+        border-right: 1px solid #fed7d7;
+    }
+    
+    .product-info {
+        padding: 2rem;
+    }
+    
+    .product-title {
+        color: #2d3748;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-price {
+        color: #e53e3e;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    
+    .product-description {
+        color: #4a5568;
+        line-height: 1.6;
+        margin: 1.5rem 0;
+    }
+    
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+    
+    .qty-btn {
+        background-color: #feb2b2;
+        color: #e53e3e;
+        border: 1px solid #fed7d7;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+    
+    .qty-input {
+        width: 60px;
+        height: 36px;
+        text-align: center;
+        border: 1px solid #fed7d7;
+        margin: 0 10px;
+        font-size: 1rem;
+    }
+    
+    .add-to-cart-btn {
+        background-color: #e53e3e;
+        color: white;
+        border: none;
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        width: 100%;
+        margin-top: 1rem;
+    }
+    
+    .add-to-cart-btn:hover {
+        background-color: #c53030;
+    }
+    
+    /* Tabs */
+    .tabs {
+        border-bottom: 1px solid #fed7d7;
+        margin: 2rem 0;
+    }
+    
+    .tab-btn {
+        background: none;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        color: #4a5568;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .tab-btn.active {
+        color: #e53e3e;
+        font-weight: 600;
+    }
+    
+    .tab-btn.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #e53e3e;
+    }
+    
+    .tab-content {
+        padding: 1.5rem 0;
+        color: #4a5568;
+        line-height: 1.6;
+    }
+    
+    /* Related products */
+    .related-section {
+        margin: 3rem 0;
+    }
+    
+    .section-title {
+        color: #2d3748;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .related-products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .related-product {
+        background: white;
+        border: 1px solid #fed7d7;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .related-product:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .product-badge {
+        background-color: #e53e3e;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
+    
+    /* Toast notification */
     .toast-notification {
       position: fixed;
       top: 32px;
       right: 32px;
-      background: #38a169;
+      background: #e53e3e;
       color: #fff;
       padding: 16px 28px;
       border-radius: 8px;
@@ -132,17 +338,18 @@
       <a href="#" class="header-icon"><i class="far fa-user"></i> Profile</a>
       <a href="#" class="header-icon"><i class="far fa-comment"></i> Message</a>
       <a href="#" class="header-icon"><i class="far fa-clipboard"></i> Orders</a>
-      <a href="cart.html" class="header-icon">
-        <i class="fas fa-shopping-cart"></i> My Cart
-      </a>
+      <a href="{% url 'cart' %}" class="header-icon">
+  <i class="fas fa-shopping-cart"></i> My Cart
+</a>
+
      </div>
   </header>
 
   <!-- Navigation Bar -->
   <nav class="nav-bar">
     <ul class="nav-menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="productlist.html">Shop</a></li>
+      <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'product_list' %}">Shop</a></li>
       <li><a href="#">Categories</a></li>
       <li><a href="#">Laptops</a></li>
       <li><a href="#">Smartphones</a></li>
@@ -155,9 +362,10 @@
   <div class="breadcrumb-section">
     <div class="container">
       <div class="breadcrumb-content">
-        <a href="index.html">Home</a>
+        <a href="{% url 'index' %}">Home</a>
         <span class="divider">/</span>
-        <a href="productlist.html">Shop</a>
+        <a href="{% url 'product_list' %}">Shop</a>
+
         <span class="divider">/</span>
         <span class="current">Product Details</span>
       </div>
@@ -165,49 +373,19 @@
   </div>
 
   <!-- Product Detail Section -->
-  <div class="container">
-    <div class="product-detail-container" id="product-detail"></div>
+   <div class="container">
+    <div class="product-detail-container" id="product-detail-container"></div>
   </div>
 
   <!-- Product Tabs -->
   <div class="product-detail-wrapper">
-    <div class="product-detail-card" id="product-detail">
+    <div class="product-detail-card" id="product-loading">
       <p>Loading product details...</p>
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const productId = urlParams.get("id");
+ 
 
-      if (productId) {
-        fetch(`/store/products/${productId}/`)
-          .then(response => response.json())
-          .then(product => {
-            const detailDiv = document.getElementById("product-detail");
-            detailDiv.innerHTML = `
-              <div class="product-box">
-                <img src="${product.image}" alt="${product.name}" width="300" />
-                <h2>${product.name}</h2>
-                <p class="price">Rs. ${product.price}</p>
-                <p class="desc">${product.description}</p>
-                <p><strong>Category:</strong> ${product.category}</p>
-                <p><strong>Stock:</strong> ${product.stock}</p>
-                <button class="add-cart">Add to Cart</button>
-                <br><br>
-                <a href="/store/products">← Back to Products</a>
-              </div>
-            `;
-          })
-          .catch(error => {
-            document.getElementById("product-detail").innerHTML = "<p>Product not found.</p>";
-          });
-      } else {
-        document.getElementById("product-detail").innerHTML = "<p>Invalid product ID.</p>";
-      }
-    });
-  </script>
   <div class="product-tabs">
     <div class="tab-header">
       <button class="tab-btn active" data-tab="description">Description</button>
@@ -216,11 +394,10 @@
     </div>
     
     <div class="tab-content">
-      <div id="description" class="tab-pane active">
-        <h3>Product Description</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
+        <div id="description">
+
+        </div>
+
       
       <div id="specifications" class="tab-pane">
         <h3>Technical Specifications</h3>
@@ -364,32 +541,120 @@
 
   <!-- Toast Notification -->
   <div id="toast" class="toast-notification">Added successfully!</div>
+  {% csrf_token %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const tabBtns = document.querySelectorAll('.tab-btn');
       const tabPanes = document.querySelectorAll('.tab-pane');
+      
+      // Tab functionality
       tabBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
-          tabBtns.forEach(btn => btn.classList.remove('active'));
-          tabPanes.forEach(pane => pane.classList.remove('active'));
-          this.classList.add('active');
-          const tabId = this.getAttribute('data-tab');
-          document.getElementById(tabId).classList.add('active');
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab');
+          
+          // Update active tab button
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Show target tab content
+          tabPanes.forEach(pane => {
+            if (pane.id === target) {
+              pane.classList.add('active');
+            } else {
+              pane.classList.remove('active');
+            }
+          });
         });
       });
+
+      // Initialize first tab as active
+      if (tabBtns.length > 0) {
+        tabBtns[0].click();
+      }
+
+      // Quantity selector
+      const minusBtn = document.querySelector('.qty-btn.minus');
+      const plusBtn = document.querySelector('.qty-btn.plus');
+      const qtyInput = document.querySelector('.qty-input');
+      
+      if (minusBtn && plusBtn && qtyInput) {
+        minusBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          let value = parseInt(qtyInput.value) || 1;
+          if (value > 1) {
+            qtyInput.value = value - 1;
+          }
+        });
+        
+        plusBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          let value = parseInt(qtyInput.value) || 1;
+          qtyInput.value = value + 1;
+        });
+      }
+    });
+
+    // Add to cart function (moved to the bottom of the file)
+
+    // Function to update cart count in the header
+    function updateCartCount() {
+      fetch('/cart/count/')
+        .then(response => response.json())
+        .then(data => {
+          if (data.count !== undefined) {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+              cartCount.textContent = data.count;
+            }
+          }
+        })
+        .catch(error => console.error('Error updating cart count:', error));
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast-notification ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      // Trigger reflow
+      void toast.offsetWidth;
+      
+      // Show toast
+      toast.classList.add('show');
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 300);
+      }, 3000);
+    }
+  </script>
   
-      // PRODUCT DETAIL LOGIC
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
+  <!-- Add CSRF token for AJAX requests -->
+  {% csrf_token %}
   
-      const detail = document.getElementById('product-detail');
-  
-      if (!id) {
-        detail.innerHTML = `<p style="color:red;">No product ID found in URL.</p>`;
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const pathParts = window.location.pathname.split('/');
+      const id = pathParts[pathParts.length - 2]; // for /store/products/2/
+
+      const detail = document.getElementById('product-detail-container');
+      const loadingCard = document.getElementById('product-loading');
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      if (!id || isNaN(id)) {
+        detail.innerHTML = `<p style="color:red;">No valid product ID found in URL.</p>`;
+        if (loadingCard) loadingCard.style.display = 'none';
         return;
       }
-  
-      fetch(`http://localhost:8000/products/${id}/`)
+
+      fetch(`http://127.0.0.1:8000/store/api/products/${id}/`)
+
+
         .then(res => {
           if (!res.ok) {
             throw new Error("Product not found.");
@@ -402,7 +667,8 @@
               <img src="${product.image || 'https://via.placeholder.com/300x300'}" alt="${product.name}" style="max-width:300px;">
               <h2>${product.name}</h2>
               <div class="price">Rs. ${product.price}</div>
-              <p class="desc">${product.description}</p>
+              
+
               <p class="cat">Category: ${product.category?.name || 'N/A'}</p>
               <p class="stock ${product.stock > 0 ? '' : 'out-of-stock'}">
                 ${product.stock > 0 ? 'In Stock: ' + product.stock : 'Out of Stock'}
@@ -411,23 +677,77 @@
                 ${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
               </button>
             </div>
+               
           `;
+          document.getElementById('description').innerHTML = `<p>${product.description}</p>`;
+          if (loadingCard) loadingCard.style.display = 'none';
         })
         .catch(error => {
           detail.innerHTML = `<p style="color:red;">${error.message}</p>`;
+          if (loadingCard) loadingCard.style.display = 'none';
         });
-  
       // Add to cart function
-      window.addToCart = function (id) {
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        if (!cart.includes(id)) cart.push(id);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        const toast = document.getElementById('toast');
-        if (toast) {
-          toast.classList.add('show');
-          setTimeout(() => {
-            toast.classList.remove('show');
-          }, 2000);
+      window.addToCart = function (productId) {
+        const qty = 1; // Default quantity to 1
+        
+        // Get the CSRF token
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        if (!csrfToken) {
+          console.error('CSRF token not found');
+          showToast('Security error. Please refresh the page and try again.', 'error');
+          return;
+        }
+        
+        // Create form data
+        const formData = new FormData();
+        formData.append('quantity', qty);
+        formData.append('csrfmiddlewaretoken', csrfToken);
+        
+        // Show loading state
+        const addButton = document.querySelector(`button[onclick*="addToCart(${productId})"]`);
+        if (addButton) {
+          const originalText = addButton.textContent;
+          addButton.disabled = true;
+          addButton.textContent = 'Adding...';
+          
+          // Revert button state after 2 seconds if request fails
+          const revertButton = () => {
+            addButton.disabled = false;
+            addButton.textContent = originalText;
+          };
+          
+          // Send POST request to add item to cart
+          fetch(`/cart/add/${productId}/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+            },
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            if (data.success) {
+              showToast(data.message || 'Item added to cart!');
+              // Update cart count in the header
+              updateCartCount();
+              // Update button to show success
+              addButton.textContent = 'Added to Cart';
+              setTimeout(revertButton, 2000);
+            } else {
+              showToast(data.error || 'Failed to add item to cart', 'error');
+              revertButton();
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showToast('An error occurred. Please try again.', 'error');
+            revertButton();
+          });
         }
       };
     });

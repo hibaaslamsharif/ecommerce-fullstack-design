@@ -7,9 +7,7 @@
     <title>Shopping Cart - Ecommerce</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
-    <script src="{% static 'store/script.js' %}"></script>   
+    <link rel="stylesheet" href="{% static 'store/css/index.css' %}">
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -104,7 +102,7 @@
             transition: background 0.2s;
         }
         .qty-btn:hover {
-            background: #3182ce;
+            background: #e53e3e;
             color: #fff;
         }
         .qty-input {
@@ -161,20 +159,38 @@
             border-bottom: none;
         }
         .cart-summary .checkout-btn {
-            width: 100%;
-            padding: 13px;
-            background: #3182ce;
+            background-color: #e53e3e;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
+            padding: 14px 24px;
+            font-size: 1.1rem;
             font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 18px 0 10px 0;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .cart-summary .checkout-btn:hover {
-            background: #2c5282;
+        
+        .checkout-btn:hover {
+            background-color: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .checkout-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .checkout-btn:disabled {
+            background-color: #feb2b2;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         .coupon-section {
             display: flex;
@@ -320,32 +336,69 @@
     </div>
 
     <!-- Cart Section -->
-    <section class="cart-section">
+    <main class="cart-section">
         <div class="container">
             <h1>Your Shopping Cart</h1>
-            <p class="cart-count">You have 3 items in your cart</p>
+            <div class="cart-items" id="cart-items">
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                    <div class="cart-item" data-id="{{ item.product.id }}">
+                        <div class="item-info">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image }}" alt="{{ item.product.name }}" class="item-image">
+                            {% else %}
+                            <div class="no-image">No image</div>
+                            {% endif %}
+                            <div>
+                                <h4>{{ item.product.name }}</h4>
+                                <p>${{ item.product.price|floatformat:2 }}</p>
+                                <button class="remove-item" data-id="{{ item.product.id }}">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                        <div class="item-quantity">
+                            <button class="qty-btn minus">-</button>
+                            <input type="number" value="{{ item.quantity }}" min="1" class="qty-input">
+                            <button class="qty-btn plus">+</button>
+                        </div>
+                        <div class="item-total">${{ item.total|floatformat:2 }}</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Looks like you haven't added anything to your cart yet.</p>
+                        <a href="{% url 'index' %}" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                {% endif %}
+            </div>
             
-            <div class="cart-items-container" id="cart-items"></div>
-            
+            {% if cart_items %}
             <div class="cart-summary">
-                <h3>Cart Summary</h3>
-                <div class="summary-item">
-                    <span>Subtotal</span>
-                    <span class="subtotal-amount">$799.97</span>
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal ({{ cart_items|length }} items)</span>
+                    <span>${{ subtotal|floatformat:2 }}</span>
                 </div>
                 <div class="summary-item">
                     <span>Tax (5%)</span>
-                    <span class="tax-amount">$40.00</span>
+                    {% widthratio subtotal 1 0.05 as tax %}
+                    <span>${{ tax|floatformat:2 }}</span>
                 </div>
                 <div class="summary-item total">
                     <span>Total</span>
-                    <span class="total-amount">$839.97</span>
+                    {% widthratio subtotal 1 1.05 as total_with_tax %}
+                    <span>${{ total_with_tax|floatformat:2 }}</span>
                 </div>
-                <button class="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
-                <div class="coupon-section">
+                <button class="checkout-btn" onclick="window.location.href='{% url 'checkout' %}'">Proceed to Checkout</button>
+            </div>
+            {% endif %}
+            <div class="coupon-section">
                     <input type="text" placeholder="Enter coupon code">
                     <button class="apply-coupon">Apply Coupon</button>
-                </div>
+            </div>
             </div>
         </div>
     </section>
@@ -396,102 +449,437 @@
             <p>&copy; 2025 YourBrand. All rights reserved.</p>
         </div>
     </footer>
+    
+    <style>
+        :root {
+            --primary-color: #e53e3e;  /* Red 600 */
+            --primary-dark: #c53030;   /* Red 700 */
+            --primary-light: #feb2b2;  /* Red 200 */
+            --primary-bg: #fff5f5;     /* Red 50 */
+        }
+        
+        /* Base styles */
+        body {
+            background-color: #fff5f5;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Header styles */
+        .top-header {
+            background-color: white;
+            border-bottom: 1px solid #fed7d7;
+        }
+        
+        .logo {
+            color: #e53e3e;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .search-bar input {
+            border: 1px solid #fed7d7;
+        }
+        
+        .search-bar button {
+            background-color: #e53e3e;
+            color: white;
+        }
+        
+        .cart-icon {
+            color: #e53e3e;
+        }
+        
+        .cart-count {
+            background-color: #e53e3e;
+            color: white;
+        }
+        
+        /* Cart item styles */
+        .cart-items {
+            background: white;
+            border: 1px solid #fed7d7;
+        }
+        
+        .cart-item {
+            border-bottom: 1px solid #fed7d7;
+        }
+        
+        .item-quantity .qty-btn {
+            background-color: #feb2b2;
+            color: #e53e3e;
+            border: 1px solid #fed7d7;
+        }
+        
+        .item-quantity .qty-input {
+            border: 1px solid #fed7d7;
+        }
+        
+        .remove-item {
+            color: #e53e3e;
+        }
+        
+        .remove-item:hover {
+            color: #c53030;
+        }
+        
+        /* Cart summary */
+        .cart-summary {
+            background: white;
+            border: 1px solid #fed7d7;
+        }
+        
+        .checkout-btn {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #c53030;
+        }
+        
+        /* Empty cart */
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .empty-cart i {
+            font-size: 48px;
+            color: #cbd5e0;
+            margin-bottom: 16px;
+        }
+        .empty-cart h3 {
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .empty-cart p {
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            display: inline-block;
+            background: #e53e3e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="top-header">
+        <div class="logo">Brand</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search products...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-actions">
+            <a href="#" class="user-icon"><i class="fas fa-user"></i></a>
+            <a href="{% url 'cart' %}" class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">
+                    {% with total_items=cart_items|length %}
+                        {{ total_items }}
+                    {% endwith %}
+                </span>
+            </a>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="cart-section">
+        <div class="container">
+            <h1>Your Shopping Cart</h1>
+            
+            {% if cart_items %}
+            <div class="cart-items">
+                {% for item in cart_items %}
+                <div class="cart-item" data-id="{{ item.product.id }}">
+                    <div class="item-info">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                        <div>
+                            <h4>{{ item.product.name }}</h4>
+                            <p>${{ item.product.price|floatformat:2 }}</p>
+                            <button class="remove-item" data-id="{{ item.product.id }}">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-quantity">
+                        <button class="qty-btn minus">-</button>
+                        <input type="number" value="{{ item.quantity }}" min="1" class="qty-input">
+                        <button class="qty-btn plus">+</button>
+                    </div>
+                    <div class="item-total">${{ item.total|floatformat:2 }}</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>${{ subtotal|floatformat:2 }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>${{ shipping|floatformat:2 }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>${{ total|floatformat:2 }}</span>
+                </div>
+                <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
+            </div>
+            {% else %}
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Your cart is empty</h3>
+                <p>Looks like you haven't added anything to your cart yet.</p>
+                <a href="{% url 'index' %}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Shipping & Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Your Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- CSRF Token for AJAX -->
+    {% csrf_token %}
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Quantity buttons functionality
-            document.querySelectorAll('.qty-btn').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const input = this.parentElement.querySelector('.qty-input');
-                    if (this.classList.contains('plus') && input.value < 10) {
-                        input.stepUp();
-                    } else if (this.classList.contains('minus') && input.value > 1) {
-                        input.stepDown();
+    document.addEventListener('DOMContentLoaded', function () {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        // Function to show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast-notification ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Trigger reflow
+            void toast.offsetWidth;
+            
+            // Show toast
+            toast.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Function to update cart count in header
+        function updateCartCount() {
+            fetch('/cart/count/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.count !== undefined) {
+                        const cartCount = document.querySelector('.cart-count');
+                        if (cartCount) {
+                            cartCount.textContent = data.count;
+                        }
                     }
-                    updateCartTotal();
                 });
+        }
+        // Function to update quantity via AJAX
+        function updateQuantity(productId, newQuantity) {
+            const formData = new FormData();
+            formData.append('quantity', newQuantity);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            
+            fetch(`/cart/update/${productId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    showToast(data.error || 'Failed to update quantity', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('An error occurred. Please try again.', 'error');
             });
-
-            // Remove item functionality
-            document.querySelectorAll('.remove-item').forEach(button => {
-                button.addEventListener('click', function() {
-                    this.closest('.cart-item').remove();
-                    updateCartTotal();
-                });
+        }
+    
+        // Function to remove item via AJAX
+        function removeItem(productId) {
+            if (!confirm('Are you sure you want to remove this item from your cart?')) {
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', csrftoken);
+            
+            fetch(`/cart/remove/${productId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the item from the DOM
+                    const itemElement = document.querySelector(`.cart-item[data-id="${productId}"]`);
+                    if (itemElement) {
+                        itemElement.remove();
+                        updateCartCount();
+                        
+                        // Check if cart is now empty
+                        if (document.querySelectorAll('.cart-item').length === 0) {
+                            window.location.reload();
+                        } else {
+                            showToast(data.message || 'Item removed from cart');
+                        }
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    showToast(data.error || 'Failed to remove item', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('An error occurred. Please try again.', 'error');
             });
+        }
 
-            // Update cart total when quantity changes
-            document.querySelectorAll('.qty-input').forEach(input => {
-                input.addEventListener('change', updateCartTotal);
+    // Initialize event listeners for quantity controls and remove buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        // Quantity controls
+        document.querySelectorAll('.qty-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('.qty-input');
+                const productId = this.closest('.cart-item').dataset.id;
+                let quantity = parseInt(input.value);
+                
+                if (this.classList.contains('plus')) {
+                    quantity++;
+                } else if (this.classList.contains('minus') && quantity > 1) {
+                    quantity--;
+                }
+                
+                input.value = quantity;
+                updateQuantity(productId, quantity);
             });
+        });
+        
+        // Remove item buttons
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.id;
+                removeItem(productId);
+            });
+        });
+    });
+    
+    // Function to update cart total and summary
+    function updateCartTotal() {
+        let subtotal = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const priceEl = item.querySelector('.item-price');
+            const qtyInput = item.querySelector('.qty-input');
+            const totalEl = item.querySelector('.item-total');
 
-            // Initial calculation
-            updateCartTotal();
+            if (priceEl && qtyInput && totalEl) {
+                const price = parseFloat(priceEl.textContent.replace('$', '')) || 0;
+                const qty = parseInt(qtyInput.value) || 1;
+                const itemTotal = price * qty;
+
+                totalEl.textContent = '$' + itemTotal.toFixed(2);
+                subtotal += itemTotal;
+            }
         });
 
-        function updateCartTotal() {
-            let subtotal = 0;
-            
-            // Calculate subtotal from all items
-            document.querySelectorAll('.cart-item').forEach(item => {
-                const price = parseFloat(item.querySelector('.item-price').textContent.replace('$', ''));
-                const qty = parseInt(item.querySelector('.qty-input').value);
-                const total = price * qty;
-                
-                // Update item total
-                item.querySelector('.item-total').textContent = '$' + total.toFixed(2);
-                subtotal += total;
-            });
-            
-            // Calculate tax and total
-            const tax = subtotal * 0.05; // 5% tax
-            const total = subtotal + tax;
-            
-            // Update summary
-            document.querySelector('.subtotal-amount').textContent = '$' + subtotal.toFixed(2);
-            document.querySelector('.tax-amount').textContent = '$' + tax.toFixed(2);
-            document.querySelector('.total-amount').textContent = '$' + total.toFixed(2);
-            
-            // Update cart count
+        updateCartSummary(subtotal);
+    }
+
+    // Function to update cart summary
+    function updateCartSummary(subtotal) {
+        const tax = subtotal * 0.05;
+        const total = subtotal + tax;
+
+        const subtotalEl = document.querySelector('.subtotal-amount');
+        const taxEl = document.querySelector('.tax-amount');
+        const totalEl = document.querySelector('.total-amount');
+        const countEl = document.querySelector('.cart-count');
+
+        if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toFixed(2);
+        if (taxEl) taxEl.textContent = '$' + tax.toFixed(2);
+        if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+
+        if (countEl) {
             const itemCount = document.querySelectorAll('.cart-item').length;
-            const countText = itemCount + ' item' + (itemCount !== 1 ? 's' : '');
-            document.querySelector('.cart-count').textContent = countText;
+            countEl.textContent = itemCount + ' item' + (itemCount !== 1 ? 's' : '');
         }
-    </script>
-    <script>
-        // Get cart from localStorage
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        if (cart.length === 0) {
-          document.getElementById('cart-items').innerHTML = '<p>Your cart is empty.</p>';
-        } else {
-          Promise.all(cart.map(id => fetch(`http://localhost:8000/products/${id}/`).then(res => res.json())))
-            .then(products => {
-              const container = document.getElementById('cart-items');
-              container.innerHTML = '';
-              products.forEach(product => {
-                const item = document.createElement('div');
-                item.className = 'cart-item';
-                item.innerHTML = `
-                  <img src="${product.image}" alt="${product.name}" style="width:100px;">
-                  <div>
-                    <h4>${product.name}</h4>
-                    <div class="price">$${product.price}</div>
-                    <div class="cat">Category: ${product.category}</div>
-                    <div class="stock">Stock: ${product.stock}</div>
-                    <button onclick="removeFromCart(${product.id})">Remove</button>
-                  </div>
-                `;
-                container.appendChild(item);
-              });
-            });
-        }
-        function removeFromCart(id) {
-          let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-          cart = cart.filter(pid => pid !== id);
-          localStorage.setItem('cart', JSON.stringify(cart));
-          location.reload();
-        }
-    </script>
+    }
+    
+    // Initialize cart on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update cart total when page loads
+        updateCartTotal();
+        
+        // Update cart count in header
+        updateCartCount();
+    });
+});
+</script>
+
+   
+
 </body>
 </html>
