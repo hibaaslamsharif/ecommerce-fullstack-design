@@ -236,8 +236,8 @@ python manage.py runserver
 
 ## Contact & Support
 
-- Developer: [Your Name]
-- Email: [Your Email]
+- Developer: [Hiba Aslam]
+- Email: [hibaaslamsharif098@gmail.com]
 - Project: EcommerceStore
 - Version: 1.0.0
 
