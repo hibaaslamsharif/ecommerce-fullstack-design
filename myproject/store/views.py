@@ -2,6 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
+import json
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
@@ -145,11 +149,35 @@ def update_cart(request, product_id):
             if str(product_id) in cart:
                 cart[str(product_id)]['quantity'] = quantity
                 request.session['cart'] = cart
-                messages.success(request, 'Cart updated successfully!')
+                request.session.modified = True
+                
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Cart updated successfully!',
+                        'cart_count': sum(item['quantity'] for item in cart.values())
+                    })
+                else:
+                    messages.success(request, 'Cart updated successfully!')
+            else:
+                if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'Product not found in cart'
+                    })
+                else:
+                    messages.error(request, 'Product not found in cart')
         else:
-            remove_from_cart(request, product_id)
+            return remove_from_cart(request, product_id)
     except (ValueError, TypeError):
-        messages.error(request, 'Invalid quantity')
+        error_msg = 'Invalid quantity'
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'error': error_msg
+            })
+        else:
+            messages.error(request, error_msg)
     
     return redirect('cart')
 
@@ -161,11 +189,25 @@ def remove_from_cart(request, product_id):
         product_name = cart[str(product_id)]['name']
         del cart[str(product_id)]
         request.session['cart'] = cart
-        messages.success(request, f"{product_name} removed from cart!")
+        request.session.modified = True
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True, 
+                'message': f"{product_name} removed from cart!",
+                'cart_count': sum(item['quantity'] for item in cart.values())
+            })
+        else:
+            messages.success(request, f"{product_name} removed from cart!")
+    else:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False, 
+                'error': 'Product not found in cart'
+            })
+        else:
+            messages.error(request, 'Product not found in cart')
     
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        from django.http import JsonResponse
-        return JsonResponse({'success': True, 'message': f"{product_name} removed from cart!"})
     return redirect('cart')
 
 def get_cart_count(request):
@@ -174,7 +216,42 @@ def get_cart_count(request):
     total_items = sum(item['quantity'] for item in cart.values())
     return JsonResponse({'count': total_items})
 def index_view(request):
-    return render(request, 'store/index.html')
+    # Get all active products
+    products = Product.objects.filter(is_active=True)
+    
+    # Group products by category
+    categories = {}
+    for product in products:
+        category = product.category
+        if category not in categories:
+            categories[category] = []
+        categories[category].append(product)
+    
+    # Get featured products (latest 4 products)
+    featured_products = products.order_by('-created_at')[:4]
+    
+    # Get products for different sections
+    electronics_products = products.filter(category__icontains='electronics')[:4]
+    home_products = products.filter(category__icontains='home')[:4]
+    
+    # Get deals and offers products specifically
+    deals_products = products.filter(category__icontains='deals')[:5]
+    if not deals_products.exists():
+        deals_products = products.filter(category__icontains='offers')[:5]
+    if not deals_products.exists():
+        # If no deals category, use featured products for deals section
+        deals_products = featured_products[:5]
+    
+    context = {
+        'categories': categories,
+        'featured_products': featured_products,
+        'electronics_products': electronics_products,
+        'home_products': home_products,
+        'deals_products': deals_products,
+        'all_products': products,
+    }
+    
+    return render(request, 'store/index.html', context)
 
 def checkout_view(request):
     cart = request.session.get('cart', {})
@@ -185,3 +262,54 @@ def checkout_view(request):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+@csrf_exempt
+@require_POST
+def search_products(request):
+    """Search products by name or category"""
+    try:
+        data = json.loads(request.body)
+        query = data.get('query', '').strip()
+        category = data.get('category', '').strip()
+        
+        # Start with all products
+        products = Product.objects.filter(is_active=True)
+        
+        # Filter by category if specified
+        if category:
+            products = products.filter(category__icontains=category)
+        
+        # Filter by search query if specified
+        if query:
+            products = products.filter(name__icontains=query)
+        
+        # Limit results to 20 products
+        products = products[:20]
+        
+        # Prepare results
+        results = []
+        for product in products:
+            results.append({
+                'id': product.id,
+                'name': product.name,
+                'price': float(product.price),
+                'image': product.image,
+                'category': product.category
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'results': results,
+            'count': len(results)
+        })
+        
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid JSON data'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)

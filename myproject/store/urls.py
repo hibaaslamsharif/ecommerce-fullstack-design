@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     ProductViewSet, product_list, product_detail, 
     cart_view, index_view, checkout_view,
-    add_to_cart, update_cart, remove_from_cart, get_cart_count
+    add_to_cart, update_cart, remove_from_cart, get_cart_count,
+    search_products
 )
 
 router = DefaultRouter()
@@ -23,6 +24,9 @@ urlpatterns = [
     path('cart/update/<int:product_id>/', update_cart, name='update_cart'),
     path('cart/remove/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
     path('cart/count/', get_cart_count, name='cart_count'),
+    
+    # Search URL
+    path('search/', search_products, name='search'),
     
     # Other URLs
     path('', index_view, name='index'),

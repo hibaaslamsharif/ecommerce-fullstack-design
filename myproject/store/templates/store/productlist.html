@@ -1,534 +1,305 @@
+{% extends 'store/base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products - Ecommerce</title>
-    <link rel="stylesheet" href="{% static 'store/css/index.css' %}">   
-    <script src="{% static 'store/script.js' %}"></script>
+{% block title %}Products - Ecommerce{% endblock %}
 
-    <style>
-      /* Modern Nav Bar */
-      .nav-bar {
-        background: #fff;
-        border-bottom: 1.5px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        margin-bottom: 0;
-      }
-      .nav-bar .nav-menu {
-        display: flex;
-        gap: 32px;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        min-height: 54px;
-      }
-      .nav-bar .nav-menu li {
-        display: inline-block;
-      }
-      .nav-bar .nav-menu a {
-        color: #2d3748;
-        text-decoration: none;
-        font-size: 1.08rem;
-        font-weight: 500;
-        padding: 8px 0 6px 0;
-        border-bottom: 2px solid transparent;
-        transition: color 0.2s, border-bottom 0.2s;
-        display: inline-block;
-      }
-      .nav-bar .nav-menu a:hover, .nav-bar .nav-menu a.active {
-        color: #3182ce;
-        border-bottom: 2px solid #3182ce;
-      }
-      @media (max-width: 800px) {
-        .nav-bar .nav-menu {
-          gap: 16px;
-          font-size: 0.98rem;
-        }
-      }
-      @media (max-width: 600px) {
-        .nav-bar .nav-menu {
-          flex-wrap: wrap;
-          gap: 10px;
-          min-height: 44px;
-        }
-      }
-      /* Modern Breadcrumb */
-      .breadcrumb-section {
-        background: #f8fafc;
-        border-bottom: 1px solid #e2e8f0;
-        padding: 0.7em 0;
-        font-size: 1.01rem;
-      }
-      .breadcrumb-content {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #4a5568;
-        font-weight: 500;
-        font-size: 1.01rem;
-      }
-      .breadcrumb-content a {
-        color: #3182ce;
-        text-decoration: none;
-        transition: color 0.2s;
-      }
-      .breadcrumb-content a:hover {
-        color: #2b6cb0;
-        text-decoration: underline;
-      }
-      .breadcrumb-content .divider {
-        color: #a0aec0;
-        font-size: 1.1em;
-        margin: 0 2px;
-      }
-      .breadcrumb-content .current {
-        color: #2d3748;
-        font-weight: 600;
-      }
-    </style>
-</head>
-<body>
-  <!-- Header -->
-  <header class="top-header">
-    <div class="logo">Brand</div>
-    <div class="search-bar">
-      <select>
-        <option>All category</option>
+{% block extra_css %}
+<style>
+  /* Product Grid Styles */
+  .products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .products-header h1 {
+    color: #2d3748;
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .filter-select {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: white;
+    font-size: 0.9rem;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }
+  
+  .product-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  
+  .product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .product-info {
+    padding: 20px;
+  }
+  
+  .product-info h3 {
+    margin: 0 0 10px 0;
+    color: #2d3748;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .product-price {
+    color: #3182ce;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+  
+  .product-category {
+    color: #718096;
+    font-size: 0.9rem;
+    margin: 5px 0;
+  }
+  
+  .product-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .view-details-btn {
+    flex: 1;
+    padding: 10px;
+    background: #3182ce;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  
+  .view-details-btn:hover {
+    background: #2b6cb0;
+  }
+  
+  .add-to-cart-btn {
+    padding: 10px 15px;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  
+  .add-to-cart-btn:hover {
+    background: #c53030;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+  }
+  
+  .pagination a {
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #4a5568;
+    transition: all 0.2s;
+  }
+  
+  .pagination a:hover,
+  .pagination .current {
+    background: #3182ce;
+    color: white;
+    border-color: #3182ce;
+  }
+  
+  @media (max-width: 768px) {
+    .products-header {
+      flex-direction: column;
+      gap: 15px;
+      align-items: flex-start;
+    }
+    
+    .filters {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="products-container">
+  <div class="products-header">
+    <h1>All Products</h1>
+    <div class="filters">
+      <select class="filter-select" id="category-filter">
+        <option value="">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="home">Home & Garden</option>
+        <option value="fashion">Fashion</option>
+        <option value="sports">Sports</option>
+        <option value="deals">Deals & Offers</option>
       </select>
-      <input type="text" placeholder="Search"/>
-      <button>Search</button>
-    </div>
-    <div class="header-icons">
-      <div>Profile</div>
-      <div>Message</div>
-      <div>Orders</div>
-      <div>My cart</div>
-    </div>
-  </header>
-
-  <!-- Navigation Bar -->
-  <nav class="nav-bar">
-    <ul class="nav-menu">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#">Hot Deals</a></li>
-      <li><a href="#">Categories</a></li>
-      <li><a href="#">Laptops</a></li>
-      <li><a href="#">Smartphones</a></li>
-      <li><a href="#">Cameras</a></li>
-      <li><a href="#">Accessories</a></li>
-    </ul>
-  </nav>
-
-  <!-- Breadcrumb Section -->
-  <div class="breadcrumb-section">
-    <div class="container">
-      <div class="breadcrumb-content">
-        <a href="index.html">Home</a>
-        <span class="divider">/</span>
-        <a href="#">Shop</a>
-        <span class="divider">/</span>
-        <span class="current">Products</span>
-      </div>
+      <select class="filter-select" id="sort-filter">
+        <option value="">Sort By</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+        <option value="name">Name: A to Z</option>
+        <option value="name-desc">Name: Z to A</option>
+      </select>
     </div>
   </div>
-
-  <!-- Main Content -->
-  <main class="main-content shop-page">
-    <div class="container">
-      <div class="shop-header">
-        <h1 class="page-title">Products</h1>
-        <div class="shop-actions">
-          <div class="view-options">
-            <button class="view-option active" data-view="grid"><i class="fas fa-th"></i></button>
-            <button class="view-option" data-view="list"><i class="fas fa-list"></i></button>
-          </div>
-          <div class="sort-options">
-            <span>Sort by:</span>
-            <select id="sort-by">
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest Arrivals</option>
-              <option value="bestselling">Best Selling</option>
-            </select>
-          </div>
-          <div class="show-options">
-            <span>Show:</span>
-            <select id="show-count">
-              <option value="12">12</option>
-              <option value="24">24</option>
-              <option value="36">36</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="shop-content">
-        <!-- Sidebar -->
-        <aside class="shop-sidebar">
-          <!-- Categories Widget -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Categories</h3>
-            <ul class="category-list">
-              <li class="active"><a href="#">All Categories</a></li>
-              <li><a href="#">Electronics</a></li>
-              <li><a href="#">Fashion</a></li>
-              <li><a href="#">Home & Garden</a></li>
-              <li><a href="#">Sports & Outdoors</a></li>
-              <li><a href="#">Beauty</a></li>
-              <li><a href="#">Toys & Games</a></li>
-              <li><a href="#">Books</a></li>
-            </ul>
-          </div>
-
-          <!-- Price Filter -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Filter by Price</h3>
-            <div class="price-range-slider">
-              <div class="price-range"></div>
-              <div class="price-inputs">
-                <input type="text" id="min-price" value="$0">
-                <span>-</span>
-                <input type="text" id="max-price" value="$1000">
-                <button class="filter-btn">Filter</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Color Filter -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Color</h3>
-            <div class="color-options">
-              <label class="color-option" style="background-color: #000000;">
-                <input type="checkbox" name="color" value="black">
-                <span class="checkmark"></span>
-              </label>
-              <label class="color-option" style="background-color: #ffffff; border: 1px solid #ddd;">
-                <input type="checkbox" name="color" value="white">
-                <span class="checkmark"></span>
-              </label>
-              <label class="color-option" style="background-color: #ff0000;">
-                <input type="checkbox" name="color" value="red">
-                <span class="checkmark"></span>
-              </label>
-              <label class="color-option" style="background-color: #0000ff;">
-                <input type="checkbox" name="color" value="blue">
-                <span class="checkmark"></span>
-              </label>
-              <label class="color-option" style="background-color: #00ff00;">
-                <input type="checkbox" name="color" value="green">
-                <span class="checkmark"></span>
-              </label>
-              <label class="color-option" style="background-color: #ffff00;">
-                <input type="checkbox" name="color" value="yellow">
-                <span class="checkmark"></span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Size Filter -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Size</h3>
-            <div class="size-options">
-              <label class="size-option">
-                <input type="checkbox" name="size" value="xs">
-                <span>XS</span>
-              </label>
-              <label class="size-option">
-                <input type="checkbox" name="size" value="s">
-                <span>S</span>
-              </label>
-              <label class="size-option">
-                <input type="checkbox" name="size" value="m" checked>
-                <span>M</span>
-              </label>
-              <label class="size-option">
-                <input type="checkbox" name="size" value="l">
-                <span>L</span>
-              </label>
-              <label class="size-option">
-                <input type="checkbox" name="size" value="xl">
-                <span>XL</span>
-              </label>
-              <label class="size-option">
-                <input type="checkbox" name="size" value="xxl">
-                <span>XXL</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Brand Filter -->
-          <div class="sidebar-widget">
-            <h3 class="widget-title">Brand</h3>
-            <div class="brand-options">
-              <label class="brand-option">
-                <input type="checkbox" name="brand" value="nike">
-                <span>Nike</span>
-              </label>
-              <label class="brand-option">
-                <input type="checkbox" name="brand" value="adidas">
-                <span>Adidas</span>
-              </label>
-              <label class="brand-option">
-                <input type="checkbox" name="brand" value="puma" checked>
-                <span>Puma</span>
-              </label>
-              <label class="brand-option">
-                <input type="checkbox" name="brand" value="under-armour">
-                <span>Under Armour</span>
-              </label>
-              <label class="brand-option">
-                <input type="checkbox" name="brand" value="reebok">
-                <span>Reebok</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Special Offers -->
-          <div class="sidebar-widget special-offers">
-            <h3 class="widget-title">Special Offers</h3>
-            <div class="special-offer">
-              <div class="offer-badge">-30%</div>
-              <div class="offer-content">
-                <h4>Summer Sale</h4>
-                <p>Up to 30% off on selected items</p>
-                <a href="#" class="shop-now">Shop Now</a>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <!-- Product Grid -->
-        <div class="product-grid-container">
-          <div class="product-grid">
-            <div class="search-bar" style="margin: 20px 0;">
-              <input type="text" id="search-input" placeholder="Search by name or category..." style="padding: 8px; width: 250px;">
-              <button id="search-btn" style="padding: 8px 16px;">Search</button>
-            </div>
-            <div class="product-grid" id="product-list"></div>
-            <script>
-              document.addEventListener("DOMContentLoaded", function () {
-                fetch("http://127.0.0.1:8000/store/products/")
-                  .then((response) => response.json())
-                  .then((data) => {
-                    const productList = document.querySelector(".product-list");
-                    productList.innerHTML = ""; // Clear existing static content
-            
-                    data.forEach((product) => {
-                      const productCard = document.createElement("div");
-                      productCard.className = "product-card";
-            
-                      productCard.innerHTML = `
-                        <a href="product-detail.html?id=${product.id}">
-                          <img src="${product.image}" alt="${product.name}" />
-                          <h3>${product.name}</h3>
-                          <p>${product.description}</p>
-                          <p>PKR ${product.price}</p>
-                        </a>
-                      `;
-            
-                      productList.appendChild(productCard);
-                    });
-                  })
-                  .catch((error) => {
-                    console.error("Error fetching products:", error);
-                  });
-              });
-            </script>
-            
-            <script>
-              function fetchProducts(query = '') {
-                let url = 'http://localhost:8000/products/';
-                if (query) url += `?search=${encodeURIComponent(query)}`;
-                fetch(url)
-                  .then(res => res.json())
-                  .then(products => {
-                    const grid = document.getElementById('product-list');
-                    grid.innerHTML = '';
-                    products.forEach(product => {
-                      const card = document.createElement('div');
-                      card.className = 'product-card';
-                      card.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h4>${product.name}</h4>
-                        <div class="price">$${product.price}</div>
-                        <a href="product-detail.html?id=${product.id}" class="btn">View Details</a>
-                        <button onclick="addToCart(${product.id})">Add to Cart</button>
-                      `;
-                      grid.appendChild(card);
-                    });
-                  });
-              }
-              fetchProducts();
-              document.getElementById('search-btn').onclick = function() {
-                const query = document.getElementById('search-input').value;
-                fetchProducts(query);
-              };
-              document.getElementById('search-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                  fetchProducts(this.value);
-                }
-              });
-              // Cart logic
-              function addToCart(id) {
-                let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-                if (!cart.includes(id)) cart.push(id);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                alert('Added to cart!');
-              }
-            </script>
-             <h1>All Products</h1>
-
-             <div class="product-list">
-               {% for product in products %}
-                 <div class="product">
-                   {% if product.image %}
-                     <img src="{{ product.image }}" alt="{{ product.name }}" width="200" />
-                   {% endif %}
-                   <h2>{{ product.name }}</h2>
-                   <p>{{ product.description }}</p>
-                   <p>Price: Rs {{ product.price }}</p>
-                   <a href="{% url 'product_detail' product.id %}">View Detail</a>
-
-
-                 </div>
-               {% empty %}
-                 <p>No products available.</p>
-               {% endfor %}
-             </div>
-          
-          
-          <!-- Pagination -->
-          <div class="pagination">
-            <a href="#" class="page-nav disabled">
-              <i class="fas fa-chevron-left"></i>
-            </a>
-            <a href="#" class="page-number active">1</a>
-            <a href="#" class="page-number">2</a>
-            <a href="#" class="page-number">3</a>
-            <a href="#" class="page-number">4</a>
-            <a href="#" class="page-number">5</a>
-            <a href="#" class="page-nav">
-              <i class="fas fa-chevron-right"></i>
-            </a>
-          </div>
+  
+  <div class="product-grid" id="products-grid">
+    {% for product in products %}
+    <div class="product-card" data-category="{{ product.category|lower }}" data-price="{{ product.price }}">
+      <img src="{{ product.image }}" alt="{{ product.name }}">
+      <div class="product-info">
+        <h3>{{ product.name }}</h3>
+        <p class="product-category">{{ product.category }}</p>
+        <p class="product-price">${{ product.price|floatformat:2 }}</p>
+        <div class="product-actions">
+          <a href="{% url 'product_detail' product.id %}" class="view-details-btn">View Details</a>
+          <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})">
+            <i class="fas fa-cart-plus"></i>
+          </button>
         </div>
       </div>
     </div>
-  </main>
+    {% endfor %}
+  </div>
+  
+  {% if products.has_other_pages %}
+  <div class="pagination">
+    {% if products.has_previous %}
+      <a href="?page={{ products.previous_page_number }}">&laquo; Previous</a>
+    {% endif %}
+    
+    {% for num in products.paginator.page_range %}
+      {% if products.number == num %}
+        <span class="current">{{ num }}</span>
+      {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+        <a href="?page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+    
+    {% if products.has_next %}
+      <a href="?page={{ products.next_page_number }}">Next &raquo;</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
 
-  <!-- Newsletter Section -->
-  <section class="newsletter-section">
-    <div class="container">
-      <div class="newsletter-content">
-        <h2>Subscribe to Our Newsletter</h2>
-        <p>Get the latest updates on new products and upcoming sales</p>
-        <form class="newsletter-form">
-          <input type="email" placeholder="Enter your email address" required>
-          <button type="submit">Subscribe</button>
-        </form>
-        <p class="terms">
-          By subscribing, you agree to our <a href="#">Privacy Policy</a> and consent to receive updates.
-        </p>
-      </div>
-    </div>
-  </section>
+<script>
+// Filter and sort functionality
+document.getElementById('category-filter').addEventListener('change', filterProducts);
+document.getElementById('sort-filter').addEventListener('change', sortProducts);
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <!-- Logo and Description -->
-      <div class="footer-about">
-        <div class="footer-logo">
-          <h2>Ecommerce</h2>
-        </div>
-        <p class="footer-description">
-          We are a leading e-commerce platform offering a wide range of products at competitive prices.
-        </p>
-        <div class="social-links">
-          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
+function filterProducts() {
+  const categoryFilter = document.getElementById('category-filter').value;
+  const products = document.querySelectorAll('.product-card');
+  
+  products.forEach(product => {
+    const productCategory = product.dataset.category;
+    if (!categoryFilter || productCategory.includes(categoryFilter.toLowerCase())) {
+      product.style.display = 'block';
+    } else {
+      product.style.display = 'none';
+    }
+  });
+}
 
-      <!-- Quick Links -->
-      <div class="footer-links">
-        <h3 class="footer-heading">Quick Links</h3>
-        <ul class="footer-menu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Blog</a></li>
-        </ul>
-      </div>
+function sortProducts() {
+  const sortFilter = document.getElementById('sort-filter').value;
+  const productsGrid = document.getElementById('products-grid');
+  const products = Array.from(productsGrid.children);
+  
+  products.sort((a, b) => {
+    const aPrice = parseFloat(a.dataset.price);
+    const bPrice = parseFloat(b.dataset.price);
+    const aName = a.querySelector('h3').textContent;
+    const bName = b.querySelector('h3').textContent;
+    
+    switch(sortFilter) {
+      case 'price-low':
+        return aPrice - bPrice;
+      case 'price-high':
+        return bPrice - aPrice;
+      case 'name':
+        return aName.localeCompare(bName);
+      case 'name-desc':
+        return bName.localeCompare(aName);
+      default:
+        return 0;
+    }
+  });
+  
+  products.forEach(product => productsGrid.appendChild(product));
+}
 
-      <!-- Categories -->
-      <div class="footer-links">
-        <h3 class="footer-heading">Categories</h3>
-        <ul class="footer-menu">
-          <li><a href="productlist.html?category=electronics">Electronics</a></li>
-          <li><a href="productlist.html?category=clothing">Clothing</a></li>
-          <li><a href="productlist.html?category=home">Home & Garden</a></li>
-          <li><a href="productlist.html?category=beauty">Beauty</a></li>
-          <li><a href="productlist.html?category=sports">Sports & Outdoors</a></li>
-        </ul>
-      </div>
-
-      <!-- Contact Info -->
-      <div class="footer-contact">
-        <h3 class="footer-heading">Contact Us</h3>
-        <div class="contact-info">
-          <p><i class="fas fa-map-marker-alt"></i> 123 Ecommerce St, City, Country</p>
-          <p><i class="fas fa-phone"></i> +1 234 567 890</p>
-          <p><i class="fas fa-envelope"></i> info@ecommerce.com</p>
-          <p><i class="fas fa-clock"></i> Mon - Fri: 9:00 - 20:00</p>
-        </div>
-      </div>
-
-      <!-- Newsletter -->
-      <div class="footer-newsletter">
-        <h3 class="footer-heading">Newsletter</h3>
-        <p>Subscribe to get special offers and updates</p>
-        <form class="newsletter-form">
-          <input type="email" placeholder="Your email address" required>
-          <button type="submit">Subscribe</button>
-        </form>
-        <div class="payment-methods">
-          <i class="fab fa-cc-visa"></i>
-          <i class="fab fa-cc-mastercard"></i>
-          <i class="fab fa-cc-paypal"></i>
-          <i class="fab fa-cc-apple-pay"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer Bottom -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-container">
-        <p class="copyright">
-          &copy; 2023 Ecommerce. All rights reserved.
-        </p>
-        <div class="legal-links">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Shipping Policy</a>
-          <a href="#">Refund Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <!-- Custom Scripts -->
-    <script src="script.js"></script>
-</body>
-</html>
+function addToCart(productId) {
+  fetch(`/cart/add/${productId}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      updateCartCount();
+      alert(data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+</script>
+{% endblock %}

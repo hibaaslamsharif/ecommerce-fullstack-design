@@ -1,606 +1,804 @@
+{% extends 'store/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ecommerce Home Page</title>
-  <link rel="stylesheet" href="{% static 'store/css/index.css' %}">
-  <script src="{% static 'store/script.js' %}"></script>
+
+{% block title %}Ecommerce Home Page{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Three Column Layout */
+  .home-container {
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 200px);
+  }
+
+  /* Left Sidebar - Categories */
+  .categories-sidebar {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    height: fit-content;
+  }
+
+  .categories-sidebar h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 20px;
+  }
+
+  .category-item {
+    display: block;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .category-item:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .category-item.active {
+    background: #dbeafe;
+    color: #1f2937;
+    font-weight: 600;
+  }
+
+  /* Central Hero Section */
+  .hero-section {
+    background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+    border-radius: 16px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .hero-content {
+    flex: 1;
+    max-width: 400px;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .hero-content h2 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #1f2937;
+    margin-bottom: 24px;
+    line-height: 1.1;
+  }
+
+  .hero-content p {
+    font-size: 1.1rem;
+    color: #374151;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .learn-more-btn {
+    display: inline-block;
+    background: white;
+    color: #1f2937;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+
+  .learn-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  .hero-images {
+    position: relative;
+    width: 300px;
+    height: 300px;
+  }
+
+  .hero-image {
+    position: absolute;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+  }
+
+  .hero-image:hover {
+    transform: scale(1.05);
+  }
+
+  .hero-image.laptop {
+    top: 20px;
+    right: 40px;
+    width: 120px;
+    height: 80px;
+    background: #f8fafc;
+    border: 2px solid #e5e7eb;
+  }
+
+  .hero-image.headphones {
+    top: 120px;
+    right: 20px;
+    width: 100px;
+    height: 60px;
+    background: #1f2937;
+    border: 2px solid #374151;
+  }
+
+  .hero-image.phone {
+    top: 200px;
+    right: 60px;
+    width: 80px;
+    height: 120px;
+    background: white;
+    border: 2px solid #e5e7eb;
+  }
+
+  /* Right Sidebar */
+  .right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .user-card {
+    background: #dbeafe;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    background: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  .user-info h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  .user-info p {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .user-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    background: #3b82f6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: #2563eb;
+  }
+
+  .btn-outline {
+    background: white;
+    color: #3b82f6;
+    padding: 10px 20px;
+    border: 2px solid #3b82f6;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline:hover {
+    background: #3b82f6;
+    color: white;
+  }
+
+  .promo-card {
+    background: #fbbf24;
+    color: white;
+    text-align: center;
+  }
+
+  .promo-card h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .promo-card p {
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .promo-card.blue {
+    background: #a7f3d0;
+    color: #1f2937;
+  }
+
+  /* Product Sections - Restored */
+  .section {
+    padding: 80px 0;
+  }
   
-  <style>
-    /* Recommended Products Section Width */
-    .recommended-section {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  
+  .section-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 16px;
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: #718096;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  /* Featured Products */
+  .featured-section {
+    background: #f8fafc;
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+  
+  .product-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+  
+  .product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+  }
+  
+  .product-card:hover img {
+    transform: scale(1.05);
+  }
+  
+  .product-card h4 {
+    font-size: 1.3rem;
+    color: #2d3748;
+    margin: 16px 0 8px 0;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  
+  .product-card .price {
+    color: #e53e3e;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin: 12px 0;
+  }
+  
+  .product-card .rating {
+    color: #f6ad55;
+    font-size: 1.1rem;
+    margin: 12px 0;
+  }
+  
+  .product-card .view-details {
+    display: inline-block;
+    background: #3182ce;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .product-card .view-details:hover {
+    background: #2c5aa0;
+    transform: translateY(-2px);
+  }
+  
+  /* Category Sections */
+  .category-section {
+    background: white;
+  }
+  
+  /* Deals Section */
+  .deals-section {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+  }
+  
+  .deals-section .section-title {
+    color: white;
+  }
+  
+  .deals-section .section-subtitle {
+    color: rgba(255,255,255,0.9);
+  }
+  
+  .deals-section .product-card {
+    background: white;
+    color: #2d3748;
+    position: relative;
+  }
+  
+  .deal-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #e53e3e;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  
+  /* Categories Grid */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+  }
+  
+  .category-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  
+  .category-card i {
+    font-size: 3rem;
+    color: #3182ce;
+    margin-bottom: 16px;
+  }
+  
+  .category-card h3 {
+    font-size: 1.4rem;
+    color: #2d3748;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  
+  .category-card p {
+    color: #718096;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  /* Newsletter Section */
+  .newsletter-section {
+    background: #2d3748;
+    color: white;
+    text-align: center;
+    padding: 80px 0;
+  }
+  
+  .newsletter-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .newsletter-content h3 {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  
+  .newsletter-content p {
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+    opacity: 0.9;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .newsletter-form input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .newsletter-form button {
+    padding: 12px 24px;
+    background: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .newsletter-form button:hover {
+    background: #c53030;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .home-container {
+      grid-template-columns: 200px 1fr 250px;
+      gap: 16px;
     }
-    /* Recommended Products Grid Styling */
-    .recommended-section .product-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .home-container {
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
-    
-    .recommended-section .product-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
+
+    .hero-section {
+      flex-direction: column;
       text-align: center;
+      padding: 30px 20px;
     }
-    
-    .recommended-section .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    }
-    
-    .recommended-section .product-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-    
-    .recommended-section .product-card h4 {
-      margin: 0.5rem 0;
-      color: #2d3748;
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-    
-    .recommended-section .product-card .price {
-      color: #3182ce;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin: 0.5rem 0;
-    }
-    
-    .recommended-section .product-card .rating {
-      color: #f6ad55;
-      font-size: 1rem;
-    }
-    
-    @media (max-width: 768px) {
-      .recommended-section .product-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .recommended-section .product-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-    }
-  </style>
-  
-</head>
-<body>
 
-  <!-- Header -->
-  <header class="top-header">
-    <div class="logo">Brand</div>
-    <div class="search-bar">
-      <select>
-        <option>All category</option>
-      </select>
-      <input type="text" placeholder="Search"/>
-      <button>Search</button>
+    .hero-content {
+      max-width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+
+    .hero-content h2 {
+      font-size: 2.5rem;
+    }
+
+    .hero-images {
+      width: 200px;
+      height: 200px;
+    }
+
+    .user-actions {
+      flex-direction: column;
+    }
+    
+    .hero-content h1 { font-size: 2.8rem; }
+    .hero-content p { font-size: 1.2rem; }
+    .section-title { font-size: 2.2rem; }
+    .product-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .newsletter-form { flex-direction: column; }
+  }
+
+  @media (max-width: 480px) {
+    .home-container {
+      padding: 10px;
+    }
+
+    .hero-content h1 {
+      font-size: 1.8rem;
+    }
+
+    .hero-content h2 {
+      font-size: 2.2rem;
+    }
+
+    .hero-images {
+      width: 150px;
+      height: 150px;
+    }
+    
+    .hero-content h1 { font-size: 2.2rem; }
+    .hero-content p { font-size: 1.1rem; }
+    .section-title { font-size: 1.8rem; }
+    .product-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Three Column Layout -->
+<div class="home-container">
+  <!-- Left Sidebar - Categories -->
+  <div class="categories-sidebar">
+    <h3>Categories</h3>
+    <a href="#" class="category-item active">Automobiles</a>
+    <a href="#" class="category-item">Clothes and wear</a>
+    <a href="#" class="category-item">Home interiors</a>
+    <a href="#" class="category-item">Computer and tech</a>
+    <a href="#" class="category-item">Tools, equipments</a>
+    <a href="#" class="category-item">Sports and outdoor</a>
+    <a href="#" class="category-item">Animal and pets</a>
+    <a href="#" class="category-item">Machinery tools</a>
+    <a href="#" class="category-item">More category</a>
+  </div>
+
+  <!-- Central Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>Latest trending</h1>
+      <h2>Electronic items</h2>
+      <p>Discover the latest electronic gadgets and devices. From smartphones to laptops, find everything you need.</p>
+      <a href="{% url 'product_list' %}" class="learn-more-btn">Learn more</a>
     </div>
-    <div class="header-icons">
-      <div>Profile</div>
-      <div>Message</div>
-      <div>Orders</div>
-      <div>
-      <a href="cart.html" class="header-icon">
-        <i class="fas fa-shopping-cart"></i> My Cart
-      </a>
+    
+    <div class="hero-images">
+      <div class="hero-image laptop">
+        <i class="fas fa-laptop" style="font-size: 2rem; color: #6b7280; display: flex; align-items: center; justify-content: center; height: 100%;"></i>
       </div>
-    </div>
-  </header>
-
-  <!-- Navigation Bar -->
-  <nav class="nav-bar">
-    <ul>
-      <li>All category</li>
-      <li>Hot offers</li>
-      <li>Gift boxes</li>
-      <li>Projects</li>
-      <li>Menu item</li>
-    </ul>
-    <div class="lang-select">
-      <span>English, USD</span> | <span>Ship to</span>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="left-menu">
-      <ul>
-        <li><a href="productlist.html?category=automobiles">Automobiles</a></li>
-        <li><a href="productlist.html?category=clothes">Clothes and wear</a></li>
-        <li><a href="productlist.html?category=home-interiors">Home interiors</a></li>
-        <li><a href="productlist.html?category=computer-tech">Computer and tech</a></li>
-        <li><a href="productlist.html?category=tools">Tools, equipments</a></li>
-        <li><a href="productlist.html?category=sports">Sports and outdoor</a></li>
-        <li><a href="productlist.html?category=pets">Animal and pets</a></li>
-        <li><a href="productlist.html?category=machinery">Machinery tools</a></li>
-        <li><a href="productlist.html?category=more">More category</a></li>
-      </ul>
-    </div>
-
-    <div class="hero-banner">
-      <h2>Latest trending <br> <span>Electronic items</span></h2>
-      <button>Learn more</button>
-      <img src="images/headphone1.jfif" alt="Headphones" />
-    </div>
-
-    <div class="auth-cards">
-      <div class="card">Hi, user<br><button>Join now</button> <br><button>Login</button></div>
-      <div class="card orange">Get $10 off <br> with new supplier</div>
-      <div class="card blue">Send quotes <br> with supplier preferences</div>
-    </div>
-  </section>
-
- <!-- Deals and Offers Section -->
-<section class="deals-section">
-  <div class="deals-header">
-    <h3>Deals and offers</h3>
-    <p>Hygiene equipments</p>
-    <div class="timer" id="deal-timer">
-      <span id="days">00</span>D :
-      <span id="hours">00</span>H :
-      <span id="minutes">00</span>M :
-      <span id="seconds">00</span>S
+      <div class="hero-image headphones">
+        <i class="fas fa-headphones" style="font-size: 1.5rem; color: white; display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+      </div>
+      <div class="hero-image phone">
+        <i class="fas fa-mobile-alt" style="font-size: 1.8rem; color: #6b7280; display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+      </div>
     </div>
   </div>
 
-  <div class="product-slider">
-    <div class="product-card">
-      <img src="images/smartwatch1.webp" />
-      <p>Smart watches</p>
-      <span class="discount">-25%</span>
+  <!-- Right Sidebar -->
+  <div class="right-sidebar">
+    <!-- User Login/Signup Card -->
+    <div class="sidebar-card user-card">
+      <div class="user-header">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <h4>Hi, user</h4>
+          <p>let's get started</p>
+        </div>
+      </div>
+      <div class="user-actions">
+        <button class="btn-primary">Join now</button>
+        <button class="btn-outline">Log in</button>
+      </div>
     </div>
-    <div class="product-card">
-      <img src="images/laptop.png" />
-      <p>Laptops</p>
-      <span class="discount">-15%</span>
+
+    <!-- Promotion Card 1 -->
+    <div class="sidebar-card promo-card">
+      <h4>Get US $10 off</h4>
+      <p>with a new<br>supplier</p>
     </div>
-    <div class="product-card">
-      <img src="images/gopro camera.png" />
-      <p>GoPro Cameras</p>
-      <span class="discount">-40%</span>
+
+    <!-- Promotion Card 2 -->
+    <div class="sidebar-card promo-card blue">
+      <h4>Send quotes with</h4>
+      <p>supplier<br>preferences</p>
     </div>
-    <div class="product-card">
-      <img src="images/headphone1.jfif" />
-      <p>Headphones</p>
-      <span class="discount">-25%</span>
+  </div>
+</div>
+
+<!-- Featured Products -->
+<section class="featured-section section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Products</h2>
+      <p class="section-subtitle">Handpicked products for you</p>
     </div>
-    <div class="product-card">
-      <img src="images/gocamon.png" />
-      <p>Canon Cameras</p>
-      <span class="discount">-25%</span>
+    <div class="product-grid">
+      {% for product in featured_products %}
+      <div class="product-card">
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p class="price">${{ product.price|floatformat:2 }}</p>
+        <p class="rating">★★★★☆</p>
+        <a href="{% url 'product_detail' product.id %}" class="view-details">View Details</a>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- Home and Outdoor Section -->
-<section class="category-section">
-  <div class="category-header">
-    <h3>Home and Outdoor</h3>
-    <a href="#">View all</a>
-  </div>
-  <div class="category-products">
-    <div class="category-card">
-      <img src="images/wooden chair.jfif" alt="Chair">
-      <p>Wooden Chair</p>
-      <span>$25.00</span>
+<!-- Categories Section -->
+<section class="category-section section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Find what you're looking for</p>
     </div>
-    <div class="category-card">
-      <img src="images/lamp.jfif" alt="Lamp">
-      <p>Decorative Lamp</p>
-      <span>$18.00</span>
-    </div>
-    <div class="category-card">
-      <img src="images/sofa.jpg" alt="Sofa">
-      <p>Modern Sofa</p>
-      <span>$120.00</span>
-    </div>
-    <div class="category-card">
-      <img src="images/plant pot.jpg" alt="Plant Pot">
-      <p>Indoor Plant Pot</p>
-      <span>$10.00</span>
+    <div class="categories-grid">
+      <div class="category-card">
+        <i class="fas fa-laptop"></i>
+        <h3>Electronics</h3>
+        <p>Latest gadgets and tech accessories</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-home"></i>
+        <h3>Home & Garden</h3>
+        <p>Everything for your perfect home</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-tshirt"></i>
+        <h3>Fashion</h3>
+        <p>Trendy clothing and accessories</p>
+      </div>
+      <div class="category-card">
+        <i class="fas fa-dumbbell"></i>
+        <h3>Sports</h3>
+        <p>Equipment for active lifestyle</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Customer Electronics and Gadgets Section -->
-<section class="category-section">
-  <div class="category-header">
-    <h3>Customer Electronics and Gadgets</h3>
-    <a href="productlist.html?category=electronics">View all</a>
-  </div>
-  <div class="category-products">
-    <div class="category-card">
-      <img src="images/smartphone.jfif" alt="Smartphone">
-      <p>Smartphones</p>
-      <span>$299.99</span>
+<!-- Electronics Section -->
+{% if electronics_products %}
+<section class="category-section section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Electronics</h2>
+      <p class="section-subtitle">Latest technology and gadgets</p>
     </div>
-    <div class="category-card">
-      <img src="images/laptop.png" alt="Laptop">
-      <p>Laptops</p>
-      <span>$699.99</span>
-    </div>
-    <div class="category-card">
-      <img src="images/headphone1.jfif" alt="Headphones">
-      <p>Wireless Headphones</p>
-      <span>$99.99</span>
-    </div>
-    <div class="category-card">
-      <img src="images/smartwatch1.webp" alt="Smartwatch">
-      <p>Smart Watches</p>
-      <span>$199.99</span>
-    </div>
-    <div class="category-card">
-      <img src="images/tablet.jfif" alt="Tablet">
-      <p>Tablets</p>
-      <span>$249.99</span>
+    <div class="product-grid">
+      {% for product in electronics_products %}
+      <div class="product-card">
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p class="price">${{ product.price|floatformat:2 }}</p>
+        <p class="rating">★★★★☆</p>
+        <a href="{% url 'product_detail' product.id %}" class="view-details">View Details</a>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
-<!-- Suppliers Section -->
-<section class="suppliers-section">
-  <div class="section-header">
-    <h2>An easy way to send requests to all suppliers</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-  </div>
-  
-  <div class="suppliers-steps">
-    <div class="step">
-      <div class="step-number">1</div>
-      <h4>Send quote to suppliers</h4>
-      <p>Send your requirements and get responses from verified suppliers</p>
+<!-- Home & Garden Section -->
+{% if home_products %}
+<section class="category-section section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Home & Garden</h2>
+      <p class="section-subtitle">Make your home beautiful</p>
     </div>
-    
-    <div class="step-connector"></div>
-    
-    <div class="step">
-      <div class="step-number">2</div>
-      <h4>Review the responses</h4>
-      <p>Compare quotes and select the best offers from multiple suppliers</p>
-    </div>
-    
-    <div class="step-connector"></div>
-    
-    <div class="step">
-      <div class="step-number">3</div>
-      <h4>Place your order</h4>
-      <p>Finalize the deal and get your products delivered</p>
-    </div>
-  </div>
-  
-  <div class="suppliers-image">
-    <img src="https://via.placeholder.com/600x300" alt="Suppliers Illustration">
-  </div>
-</section>
-
-<!-- Recommended Products Section -->
-<section class="recommended-section">
-  <div class="section-header">
-    <h2>Featured Products</h2>
-    <div class="product-grid" id="featured-products"></div>
-  </div>
-  
-  <!-- First Row - 3 Products -->
-  <div class="product-grid">
-    <div class="product-card">
-      <img src="images/earbud.jfif" alt="Wireless Earbuds">
-      <h4>Wireless Earbuds</h4>
-      <p class="price">$79.99</p>
-      <span class="rating">★★★★☆</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/smartwatch1.webp" alt="Smart Watch">
-      <h4>Smart Watch</h4>
-      <p class="price">$149.99</p>
-      <span class="rating">★★★★★</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/speaker bluetooth.webp" alt="Bluetooth Speaker">
-      <h4>Bluetooth Speaker</h4>
-      <p class="price">$59.99</p>
-      <span class="rating">★★★★☆</span>
-    </div>
-  </div>
-  
-  <!-- Second Row - 3 Products -->
-  <div class="product-grid" style="margin-top: 2rem;">
-    <div class="product-card">
-      <img src="images/powerbank.webp" alt="Power Bank">
-      <h4>Power Bank 10000mAh</h4>
-      <p class="price">$29.99</p>
-      <span class="rating">★★★☆☆</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/fitness band.jpg" alt="Fitness Band">
-      <h4>Fitness Band</h4>
-      <p class="price">$49.99</p>
-      <span class="rating">★★★★★</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/mousewireless.jfif" alt="Wireless Mouse">
-      <h4>Wireless Mouse</h4>
-      <p class="price">$24.99</p>
-      <span class="rating">★★★★☆</span>
-    </div>
-  </div>
-  
-  <!-- Third Row - 3 Products -->
-  <div class="product-grid" style="margin-top: 2rem;">
-    <div class="product-card">
-      <img src="images/keyboard.jfif" alt="Mechanical Keyboard">
-      <h4>Mechanical Keyboard</h4>
-      <p class="price">$89.99</p>
-      <span class="rating">★★★★★</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/usb chub.jpg" alt="USB-C Hub">
-      <h4>USB-C Hub</h4>
-      <p class="price">$34.99</p>
-      <span class="rating">★★★★☆</span>
-    </div>
-    
-    <div class="product-card">
-      <img src="images/lpatop stand.jfif" alt="Laptop Stand">
-      <h4>Laptop Stand</h4>
-      <p class="price">$19.99</p>
-      <span class="rating">★★★★★</span>
-    </div>
-  </div>
-  
-  <!-- Fourth Row - 1 Product -->
-  <div class="product-grid" style="margin-top: 2rem;">
-    <div class="product-card">
-      <img src="images/phone stand.jfif" alt="Phone Stand">
-      <h4>Phone Stand</h4>
-      <p class="price">$12.99</p>
-      <span class="rating">★★★★☆</span>
-    </div>
-  </div>
-  
-  <div class="view-more">
-    <a href="#" class="view-more-btn">View More Products</a>
-  </div>
-</section>
-
-<!-- Our Extra Services Section -->
-<section class="services-section">
-  <div class="section-header">
-    <h2>Our Extra Services</h2>
-    <p>We provide the best services for our customers</p>
-  </div>
-  
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon">
-        <i class="fas fa-truck"></i>
+    <div class="product-grid">
+      {% for product in home_products %}
+      <div class="product-card">
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p class="price">${{ product.price|floatformat:2 }}</p>
+        <p class="rating">★★★★☆</p>
+        <a href="{% url 'product_detail' product.id %}" class="view-details">View Details</a>
       </div>
-      <h4>Free Shipping</h4>
-      <p>Free shipping on all orders over $100</p>
-    </div>
-    
-    <div class="service-card">
-      <div class="service-icon">
-        <i class="fas fa-undo"></i>
-      </div>
-      <h4>30 Days Return</h4>
-      <p>30-day return policy for all products</p>
-    </div>
-    
-    <div class="service-card">
-      <div class="service-icon">
-        <i class="fas fa-headset"></i>
-      </div>
-      <h4>24/7 Support</h4>
-      <p>Our support team is always here to help</p>
-    </div>
-    
-    <div class="service-card">
-      <div class="service-icon">
-        <i class="fas fa-shield-alt"></i>
-      </div>
-      <h4>Secure Payment</h4>
-      <p>100% secure payment methods</p>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
-<!-- Suppliers by Region Section -->
-<section class="suppliers-region-section">
-  <div class="section-header">
-    <h2>Suppliers by Region</h2>
-    <p>Connect with suppliers from around the world</p>
-  </div>
-  
-  <div class="region-grid">
-    <div class="region-card">
-      <div class="region-flag">
-        <img src="images/north america.png" alt="North America" style="width: 60px; height: 60px; object-fit: contain;">
-      </div>
-      <h4>North America</h4>
-      <p>200+ Suppliers</p>
-      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+<!-- Deals & Offers Section -->
+{% if deals_products %}
+<section class="deals-section section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🔥 Hot Deals & Offers</h2>
+      <p class="section-subtitle">Limited time offers you can't miss</p>
     </div>
-    
-    <div class="region-card">
-      <div class="region-flag">
-        <img src="images/europe.png" alt="Europe" style="width: 60px; height: 60px; object-fit: contain;">
+    <div class="product-grid">
+      {% for product in deals_products %}
+      <div class="product-card deal-card">
+        <div class="deal-badge">🔥 DEAL</div>
+        <img src="{{ product.image }}" alt="{{ product.name }}">
+        <h4>{{ product.name }}</h4>
+        <p class="price">${{ product.price|floatformat:2 }}</p>
+        <p class="rating">★★★★☆</p>
+        <a href="{% url 'product_detail' product.id %}" class="view-details">View Details</a>
       </div>
-      <h4>Europe</h4>
-      <p>350+ Suppliers</p>
-      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
-    </div>
-    
-    <div class="region-card">
-      <div class="region-flag">
-        <img src="images/asia.png" alt="Asia" style="width: 60px; height: 60px; object-fit: contain;">
-      </div>
-      <h4>Asia</h4>
-      <p>500+ Suppliers</p>
-      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
-    </div>
-    
-    <div class="region-card">
-      <div class="region-flag">
-        <img src="images/africa.png" alt="Africa" style="width: 60px; height: 60px; object-fit: contain;">
-      </div>
-      <h4>Africa</h4>
-      <p>150+ Suppliers</p>
-      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
-    </div>
-    
-    <div class="region-card">
-      <div class="region-flag">
-        <img src="images/south america.png" alt="South America" style="width: 60px; height: 60px; object-fit: contain;">
-      </div>
-      <h4>South America</h4>
-      <p>180+ Suppliers</p>
-      <a href="#" class="region-link">View Suppliers <i class="fas fa-arrow-right"></i></a>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 
-<!-- Subscribe to Newsletter Section -->
+<!-- Newsletter Section -->
 <section class="newsletter-section">
-  <div class="newsletter-container">
+  <div class="container">
     <div class="newsletter-content">
-      <h2>Subscribe to Our Newsletter</h2>
-      <p>Stay updated with our latest products and exclusive offers</p>
+      <h3>Stay Updated</h3>
+      <p>Subscribe to our newsletter for the latest products and exclusive offers</p>
       <form class="newsletter-form">
-        <div class="input-group">
-          <input type="email" placeholder="Enter your email address" required>
-          <button type="submit" class="subscribe-btn">Subscribe</button>
-        </div>
-        <div class="form-note">
-          <input type="checkbox" id="privacy-policy" required>
-          <label for="privacy-policy">I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a></label>
-        </div>
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
       </form>
     </div>
-    <div class="newsletter-image">
-      <img src="https://via.placeholder.com/400x300" alt="Newsletter Illustration">
-    </div>
   </div>
 </section>
-
-<!-- Footer Section -->
-<footer class="site-footer">
-  <div class="footer-container">
-    <!-- Logo and Description -->
-    <div class="footer-about">
-      <div class="footer-logo">
-        <h2>LOGO</h2>
-      </div>
-      <p class="footer-description">
-        Best information about the company gies here but now lorem ipsum is
-      </p>
-      <div class="social-links">
-        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-
-    <!-- Quick Links -->
-    <div class="footer-links">
-      <h4 class="footer-heading">Quick Links</h4>
-      <ul class="footer-menu">
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Categories</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </div>
-
-    <!-- Categories -->
-    <div class="footer-links">
-      <h4 class="footer-heading">Categories</h4>
-      <ul class="footer-menu">
-        <li><a href="#">Electronics</a></li>
-        <li><a href="#">Fashion</a></li>
-        <li><a href="#">Home & Garden</a></li>
-        <li><a href="#">Health & Beauty</a></li>
-        <li><a href="#">Sports</a></li>
-      </ul>
-    </div>
-
-    <!-- Contact Info -->
-    <div class="footer-contact">
-      <h4 class="footer-heading">Contact Us</h4>
-      <div class="contact-info">
-        <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, New York, NY 10001</p>
-        <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
-        <p><i class="fas fa-envelope"></i> info@example.com</p>
-      </div>
-      <div class="payment-methods">
-        <img src="https://via.placeholder.com/40x25" alt="Visa">
-        <img src="https://via.placeholder.com/40x25" alt="Mastercard">
-        <img src="https://via.placeholder.com/40x25" alt="PayPal">
-      </div>
-    </div>
-  </div>
-
-  <!-- Copyright and Legal -->
-  <div class="footer-bottom">
-    <div class="footer-bottom-container">
-      <p class="copyright">© 2025 E-Commerce. All rights reserved.</p>
-      <div class="legal-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Sitemap</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<div id="products-container"></div>
-
-<script src="script.js"></script>
-<script>
-    // Fetch and display top 4 products as featured
-    fetch('http://localhost:8000/products/?limit=4')
-      .then(res => res.json())
-      .then(products => {
-        const grid = document.getElementById('featured-products');
-        grid.innerHTML = '';
-        products.slice(0, 4).forEach(product => {
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          card.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h4>${product.name}</h4>
-            <div class="price">$${product.price}</div>
-            <a href="product-detail.html?id=${product.id}" class="btn">View Details</a>
-          `;
-          grid.appendChild(card);
-        });
-      });
-  </script>
-</body>
-</html>
+{% endblock %}

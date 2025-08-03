@@ -5,6 +5,10 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.URLField()
+    # Additional images for carousel
+    image_2 = models.URLField(blank=True, null=True, help_text="Second image for product carousel")
+    image_3 = models.URLField(blank=True, null=True, help_text="Third image for product carousel")
+    image_4 = models.URLField(blank=True, null=True, help_text="Fourth image for product carousel")
     description = models.TextField()
     category = models.CharField(max_length=50)
     stock = models.PositiveIntegerField(default=0)
@@ -14,6 +18,17 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_all_images(self):
+        """Returns list of all available images for this product"""
+        images = [self.image]
+        if self.image_2:
+            images.append(self.image_2)
+        if self.image_3:
+            images.append(self.image_3)
+        if self.image_4:
+            images.append(self.image_4)
+        return images
 
     class Meta:
         ordering = ['-created_at']

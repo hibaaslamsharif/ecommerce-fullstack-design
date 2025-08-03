@@ -373,14 +373,29 @@
   </div>
 
   <!-- Product Detail Section -->
-   <div class="container">
-    <div class="product-detail-container" id="product-detail-container"></div>
-  </div>
-
-  <!-- Product Tabs -->
   <div class="product-detail-wrapper">
-    <div class="product-detail-card" id="product-loading">
-      <p>Loading product details...</p>
+    <div class="product-detail-container">
+      <div class="product-detail-card" id="product-detail-container" data-loading="true">
+        <div class="product-gallery">
+          <img src="https://via.placeholder.com/400x400" alt="Product Image" />
+        </div>
+        <div class="product-info">
+          <h1 class="product-title">Loading...</h1>
+          <div class="product-price">Rs. 0</div>
+          <div class="product-category">Category</div>
+          <div class="product-stock">
+            <i class="fas fa-check-circle"></i>
+            <span>Loading stock...</span>
+          </div>
+          <div class="quantity-selector">
+            <span class="quantity-label">Quantity:</span>
+            <button class="qty-btn minus">-</button>
+            <input type="number" class="qty-input" value="1" min="1" />
+            <button class="qty-btn plus">+</button>
+          </div>
+          <button class="add-cart" disabled>Loading...</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -662,30 +677,75 @@
           return res.json();
         })
         .then(product => {
-          detail.innerHTML = `
-            <div class="product-detail-card">
-              <img src="${product.image || 'https://via.placeholder.com/300x300'}" alt="${product.name}" style="max-width:300px;">
-              <h2>${product.name}</h2>
-              <div class="price">Rs. ${product.price}</div>
-              
-
-              <p class="cat">Category: ${product.category?.name || 'N/A'}</p>
-              <p class="stock ${product.stock > 0 ? '' : 'out-of-stock'}">
-                ${product.stock > 0 ? 'In Stock: ' + product.stock : 'Out of Stock'}
-              </p>
+          const detailCard = document.getElementById('product-detail-container');
+          detailCard.removeAttribute('data-loading');
+          
+          detailCard.innerHTML = `
+            <div class="product-gallery">
+              <img src="${product.image || 'https://via.placeholder.com/400x400'}" alt="${product.name}" />
+            </div>
+            <div class="product-info">
+              <h1 class="product-title">${product.name}</h1>
+              <div class="product-price">Rs. ${product.price}</div>
+              <div class="product-category">${product.category || 'General'}</div>
+              <div class="product-stock ${product.stock > 0 ? '' : 'out-of-stock'}">
+                <i class="fas ${product.stock > 0 ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                <span>${product.stock > 0 ? 'In Stock: ' + product.stock : 'Out of Stock'}</span>
+              </div>
+              <div class="quantity-selector">
+                <span class="quantity-label">Quantity:</span>
+                <button class="qty-btn minus">-</button>
+                <input type="number" class="qty-input" value="1" min="1" max="${product.stock}" />
+                <button class="qty-btn plus">+</button>
+              </div>
               <button class="add-cart" onclick="addToCart(${product.id})" ${product.stock <= 0 ? 'disabled' : ''}>
                 ${product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
               </button>
             </div>
-               
           `;
+          
           document.getElementById('description').innerHTML = `<p>${product.description}</p>`;
-          if (loadingCard) loadingCard.style.display = 'none';
+          
+          // Reinitialize quantity selector
+          initializeQuantitySelector();
         })
-        .catch(error => {
-          detail.innerHTML = `<p style="color:red;">${error.message}</p>`;
-          if (loadingCard) loadingCard.style.display = 'none';
-        });
+                  .catch(error => {
+            const detailCard = document.getElementById('product-detail-container');
+            detailCard.removeAttribute('data-loading');
+            detailCard.innerHTML = `
+              <div class="product-info" style="grid-column: 1 / -1; text-align: center;">
+                <h1 class="product-title" style="color: #f56565;">Error Loading Product</h1>
+                <p style="color: #f56565; font-size: 1.1rem;">${error.message}</p>
+                <button class="add-cart" onclick="window.location.reload()">Try Again</button>
+              </div>
+            `;
+          });
+        
+        // Initialize quantity selector
+        function initializeQuantitySelector() {
+          const minusBtn = document.querySelector('.qty-btn.minus');
+          const plusBtn = document.querySelector('.qty-btn.plus');
+          const qtyInput = document.querySelector('.qty-input');
+          
+          if (minusBtn && plusBtn && qtyInput) {
+            minusBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              let value = parseInt(qtyInput.value) || 1;
+              if (value > 1) {
+                qtyInput.value = value - 1;
+              }
+            });
+            
+            plusBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              let value = parseInt(qtyInput.value) || 1;
+              const max = parseInt(qtyInput.max) || 999;
+              if (value < max) {
+                qtyInput.value = value + 1;
+              }
+            });
+          }
+        }
       // Add to cart function
       window.addToCart = function (productId) {
         const qty = 1; // Default quantity to 1
